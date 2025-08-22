@@ -1,0 +1,26 @@
+name: farmer_counter
+description: "Simple counter that helps farmers count things"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.2.0 <4.0.0"
+
+dependencies:
+  cupertino_icons: 1.0.8
+  flutter:
+    sdk: flutter
+  flutter_bloc: 9.1.1
+  freezed_annotation: 3.1.0
+  flutter_hooks: 0.21.3+1
+  hooked_bloc: 1.7.0
+  uuid: 4.5.1
+
+dev_dependencies:
+  build_runner: 2.7.0
+  freezed: 3.2.0
+  flutter_test:
+    sdk: flutter
+  flutter_lints: 5.0.0
+flutter:
+  uses-material-design: true
