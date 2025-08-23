@@ -1,19 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:farmer_counter/widgets/counters/counter_page.dart';
 import 'package:flutter/material.dart';
 
-class AppMain extends StatelessWidget {
-  const AppMain({super.key});
+class TestMaterialApp extends StatelessWidget {
+  final Widget home;
+
+  const TestMaterialApp({required this.home});
 
   @override
   Widget build(BuildContext context) {
     return EasyLocalization(
       supportedLocales: const <Locale>[
         Locale('en'),
-        Locale('pl'),
       ],
       path: 'assets/i18n',
-      useOnlyLangCode: true,
       fallbackLocale: const Locale('en'),
       child: Builder(
         builder: (BuildContext context) => MaterialApp(
@@ -25,7 +24,7 @@ class AppMain extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
             useMaterial3: true,
           ),
-          home: const CounterPage(),
+          home: home,
         ),
       ),
     );

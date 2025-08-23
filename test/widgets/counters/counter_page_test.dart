@@ -3,11 +3,13 @@ import 'package:farmer_counter/widgets/counters/counter_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../test_material_app.dart';
+
 void main() {
   late Widget app;
 
   setUp(() {
-    app = MaterialApp(
+    app = TestMaterialApp(
       home: Scaffold(
         body: CounterPage(),
       ),
@@ -19,6 +21,7 @@ void main() {
       // given:
       // when:
       await tester.pumpWidget(app);
+      await tester.pump();
       await pumpEventQueue();
       await tester.pumpAndSettle();
 
@@ -35,6 +38,9 @@ void main() {
       // given:
       // when:
       await tester.pumpWidget(app);
+      await tester.pump();
+      await pumpEventQueue();
+      await tester.pump();
       await pumpEventQueue();
       await tester.pumpAndSettle();
       final Finder fab = find.byType(FloatingActionButton);
@@ -60,6 +66,7 @@ void main() {
       // given:
       // when:
       await tester.pumpWidget(app);
+      await tester.pump();
       await pumpEventQueue();
       await tester.pumpAndSettle();
       final Finder fab = find.byType(FloatingActionButton);

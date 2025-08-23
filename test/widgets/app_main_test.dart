@@ -11,6 +11,7 @@ void main() {
 
       // when:
       await tester.pumpWidget(app);
+      await tester.pump();
       await pumpEventQueue();
 
       // then:

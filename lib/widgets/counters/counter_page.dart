@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:farmer_counter/cubits/counter_cubit/counter_cubit.dart';
 import 'package:farmer_counter/cubits/counter_cubit/couter_state.dart';
 import 'package:farmer_counter/models/counter_item.dart';
@@ -20,6 +21,7 @@ class CounterPage extends HookWidget {
     return BlocProvider<CounterCubit>.value(
       value: cubit,
       child: Scaffold(
+        appBar: AppBar(),
         body: Column(
           children: <Widget>[
             Expanded(
@@ -33,7 +35,7 @@ class CounterPage extends HookWidget {
 
                   final List<CounterItem> items = state.items;
                   if (items.isEmpty) {
-                    return const Center(child: Text('No items'));
+                    return Center(child: Text('counter_page.no_items'.tr()));
                   }
 
                   return ListView.builder(
@@ -72,7 +74,7 @@ class CounterPage extends HookWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _showAddDialog(context, cubit),
-          tooltip: 'Add counter',
+          tooltip: 'counter_page.add_counter'.tr(),
           child: const Icon(Icons.add),
         ),
       ),
@@ -85,18 +87,21 @@ class CounterPage extends HookWidget {
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text('Add counter'),
+          title: Text('counter_page.add_counter'.tr()),
           content: TextField(
             controller: controller,
             autofocus: true,
             textInputAction: TextInputAction.done,
-            decoration: const InputDecoration(
-              labelText: 'Name',
-              hintText: 'e.g. Apples',
+            decoration: InputDecoration(
+              labelText: 'counter_page.dialogs.add_counter_dialog.counter_name_label'.tr(),
+              hintText: 'counter_page.dialogs.add_counter_dialog.counter_name_hint'.tr(),
             ),
             onSubmitted: (_) {
               final String name = controller.text.trim();
-              if (name.isEmpty) return;
+              if (name.isEmpty) {
+                return;
+              }
+
               cubit.addItem(name);
               controller.clear();
               Navigator.of(dialogContext).pop();
@@ -108,17 +113,20 @@ class CounterPage extends HookWidget {
                 controller.clear();
                 Navigator.of(dialogContext).pop();
               },
-              child: const Text('Cancel'),
+              child: Text('counter_page.dialogs.add_counter_dialog.counter_cancel_label'.tr()),
             ),
             FilledButton(
               onPressed: () {
                 final String name = controller.text.trim();
-                if (name.isEmpty) return;
+                if (name.isEmpty) {
+                  return;
+                }
+
                 cubit.addItem(name);
                 controller.clear();
                 Navigator.of(dialogContext).pop();
               },
-              child: const Text('Add'),
+              child: Text('counter_page.dialogs.add_counter_dialog.counter_add_label'.tr()),
             ),
           ],
         );

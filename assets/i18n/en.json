@@ -1,0 +1,14 @@
+{
+  "counter_page": {
+    "no_items": "No items",
+    "add_counter": "Add counter",
+    "dialogs": {
+      "add_counter_dialog": {
+        "counter_name_label": "Name",
+        "counter_name_hint": "What are you counting? (e.g., Apples)",
+        "counter_add_label": "Add",
+        "counter_cancel_label": "Cancel"
+      }
+    }
+  }
+}

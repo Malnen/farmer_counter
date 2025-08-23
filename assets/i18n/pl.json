@@ -1,0 +1,14 @@
+{
+  "counter_page": {
+    "no_items": "Brak pozycji",
+    "add_counter": "Dodaj licznik",
+    "dialogs": {
+      "add_counter_dialog": {
+        "counter_name_label": "Nazwa",
+        "counter_name_hint": "Co liczysz? (np. jabłka)",
+        "counter_add_label": "Dodaj",
+        "counter_cancel_label": "Anuluj"
+      }
+    }
+  }
+}
