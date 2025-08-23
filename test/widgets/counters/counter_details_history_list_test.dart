@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar_community/isar.dart';
+import 'package:provider/provider.dart';
 
 import '../../test_material_app.dart';
 
@@ -23,7 +24,10 @@ void main() {
 
     app = TestMaterialApp(
       home: Scaffold(
-        body: CounterDetailsHistoryList(item: item),
+        body: ChangeNotifierProvider<ValueNotifier<CounterItem>>(
+          create: (BuildContext context) => ValueNotifier<CounterItem>(item),
+          child: CounterDetailsHistoryList(),
+        ),
       ),
     );
   });

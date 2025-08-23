@@ -1,5 +1,5 @@
 {
-  "counter_page": {
+  "counters_page": {
     "no_items": "No items",
     "add_counter": "Add counter",
     "dialogs": {
@@ -10,6 +10,10 @@
         "counter_cancel_label": "Cancel"
       }
     }
+  },
+  "counter_page": {
+    "details_tab_title": "Details",
+    "notes_tab_title": "Notes"
   },
   "counter_details_page": {
     "title": "Counter Details",

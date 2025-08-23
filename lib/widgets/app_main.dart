@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:farmer_counter/widgets/counters/counters_page.dart';
+import 'package:farmer_counter/widgets/pages/counters_page.dart';
 import 'package:flutter/material.dart';
 
 class AppMain extends StatelessWidget {
@@ -19,12 +19,8 @@ class AppMain extends StatelessWidget {
         builder: (BuildContext context) => MaterialApp(
           locale: context.locale,
           themeMode: ThemeMode.system,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange, brightness: Brightness.light),
-          ),
-          darkTheme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange, brightness: Brightness.dark),
-          ),
+          theme: _getThemeData(Brightness.light),
+          darkTheme: _getThemeData(Brightness.dark),
           supportedLocales: context.supportedLocales,
           localizationsDelegates: context.localizationDelegates,
           debugShowCheckedModeBanner: false,
@@ -33,4 +29,20 @@ class AppMain extends StatelessWidget {
       ),
     );
   }
+
+  ThemeData _getThemeData(Brightness brightness) => ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange, brightness: brightness),
+        tabBarTheme: TabBarThemeData(
+          indicator: UnderlineTabIndicator(
+            borderSide: BorderSide(
+              width: 3,
+              color: Colors.white,
+            ),
+          ),
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.grey,
+          labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+        ),
+      );
 }

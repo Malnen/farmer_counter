@@ -2,22 +2,22 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:farmer_counter/models/counter_change_item.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar_community/isar.dart';
 
 class CounterDetailsHistoryList extends HookWidget {
-  final CounterItem item;
   final int pageSize;
 
   const CounterDetailsHistoryList({
-    required this.item,
     this.pageSize = 20,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    final ValueNotifier<CounterItem> item = context.read();
     final ValueNotifier<List<CounterChangeItem>> history = useState<List<CounterChangeItem>>(<CounterChangeItem>[]);
     final ValueNotifier<bool> isLoading = useState(false);
     final ValueNotifier<bool> hasMore = useState(true);
@@ -26,22 +26,25 @@ class CounterDetailsHistoryList extends HookWidget {
 
     useEffect(
       () {
-        _loadMore(history, isLoading, hasMore, offset);
+        _loadMore(item, history, isLoading, hasMore, offset);
         return null;
       },
-      <Object?>[item.guid],
+      <Object?>[item.value.guid],
     );
 
-    useEffect(() {
-      void onScroll() {
-        if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 100) {
-          _loadMore(history, isLoading, hasMore, offset);
+    useEffect(
+      () {
+        void onScroll() {
+          if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 100) {
+            _loadMore(item, history, isLoading, hasMore, offset);
+          }
         }
-      }
 
-      scrollController.addListener(onScroll);
-      return () => scrollController.removeListener(onScroll);
-    }, <Object?>[scrollController]);
+        scrollController.addListener(onScroll);
+        return () => scrollController.removeListener(onScroll);
+      },
+      <Object?>[scrollController],
+    );
 
     if (history.value.isEmpty && isLoading.value) {
       return const Center(child: CircularProgressIndicator());
@@ -94,6 +97,7 @@ class CounterDetailsHistoryList extends HookWidget {
   }
 
   Future<void> _loadMore(
+    ValueNotifier<CounterItem> item,
     ValueNotifier<List<CounterChangeItem>> history,
     ValueNotifier<bool> isLoading,
     ValueNotifier<bool> hasMore,
@@ -107,7 +111,7 @@ class CounterDetailsHistoryList extends HookWidget {
     final Isar isar = GetIt.instance.get<Isar>();
     final List<CounterChangeItem> items = await isar.counterChangeItems
         .filter()
-        .counterGuidEqualTo(item.guid)
+        .counterGuidEqualTo(item.value.guid)
         .sortByAtDesc()
         .offset(offset.value)
         .limit(

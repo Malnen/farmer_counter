@@ -3,7 +3,7 @@ import 'package:farmer_counter/cubits/counter_cubit/counter_cubit.dart';
 import 'package:farmer_counter/cubits/counter_cubit/couter_state.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:farmer_counter/widgets/counters/counter_card.dart';
-import 'package:farmer_counter/widgets/counters/counter_details_page.dart';
+import 'package:farmer_counter/widgets/pages/counter_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -36,7 +36,7 @@ class CountersPage extends HookWidget {
 
                   final List<CounterItem> items = state.items;
                   if (items.isEmpty) {
-                    return Center(child: Text('counter_page.no_items'.tr()));
+                    return Center(child: Text('counter_pages.no_items'.tr()));
                   }
 
                   return ListView.builder(
@@ -48,7 +48,7 @@ class CountersPage extends HookWidget {
                         splashFactory: NoSplash.splashFactory,
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute<void>(
-                            builder: (BuildContext context) => CounterDetailsPage(
+                            builder: (BuildContext context) => CounterPage(
                               item: items[index],
                               onUpdate: cubit.updateItem,
                               onDelete: (CounterItem item) => cubit.removeItem(
@@ -84,7 +84,7 @@ class CountersPage extends HookWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _showAddDialog(context, cubit),
-          tooltip: 'counter_page.add_counter'.tr(),
+          tooltip: 'counter_pages.add_counter'.tr(),
           child: const Icon(Icons.add),
         ),
       ),
@@ -97,14 +97,14 @@ class CountersPage extends HookWidget {
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: Text('counter_page.add_counter'.tr()),
+          title: Text('counter_pages.add_counter'.tr()),
           content: TextField(
             controller: controller,
             autofocus: true,
             textInputAction: TextInputAction.done,
             decoration: InputDecoration(
-              labelText: 'counter_page.dialogs.add_counter_dialog.counter_name_label'.tr(),
-              hintText: 'counter_page.dialogs.add_counter_dialog.counter_name_hint'.tr(),
+              labelText: 'counter_pages.dialogs.add_counter_dialog.counter_name_label'.tr(),
+              hintText: 'counter_pages.dialogs.add_counter_dialog.counter_name_hint'.tr(),
             ),
             onSubmitted: (_) {
               final String name = controller.text.trim();
@@ -123,7 +123,7 @@ class CountersPage extends HookWidget {
                 controller.clear();
                 Navigator.of(dialogContext).pop();
               },
-              child: Text('counter_page.dialogs.add_counter_dialog.counter_cancel_label'.tr()),
+              child: Text('counter_pages.dialogs.add_counter_dialog.counter_cancel_label'.tr()),
             ),
             FilledButton(
               onPressed: () {
@@ -136,7 +136,7 @@ class CountersPage extends HookWidget {
                 controller.clear();
                 Navigator.of(dialogContext).pop();
               },
-              child: Text('counter_page.dialogs.add_counter_dialog.counter_add_label'.tr()),
+              child: Text('counter_pages.dialogs.add_counter_dialog.counter_add_label'.tr()),
             ),
           ],
         );

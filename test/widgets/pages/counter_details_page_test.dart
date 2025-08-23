@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:farmer_counter/models/counter_item.dart';
-import 'package:farmer_counter/widgets/counters/counter_details_page.dart';
+import 'package:farmer_counter/widgets/pages/counter_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 
 import '../../test_material_app.dart';
 
@@ -11,17 +12,16 @@ void main() {
   late Widget app;
 
   CounterItem? updatedItem;
-  CounterItem? deletedItem;
 
   setUp(() {
     item = CounterItem.create(name: 'TestCounter');
     updatedItem = null;
-    deletedItem = null;
     app = TestMaterialApp(
-      home: CounterDetailsPage(
-        item: item,
-        onUpdate: (CounterItem ci) => updatedItem = ci,
-        onDelete: (CounterItem ci) => deletedItem = ci,
+      home: ChangeNotifierProvider<ValueNotifier<CounterItem>>(
+        create: (BuildContext context) => ValueNotifier<CounterItem>(item),
+        child: CounterDetailsPage(
+          onUpdate: (CounterItem item) => updatedItem = item,
+        ),
       ),
     );
   });
@@ -38,8 +38,6 @@ void main() {
       // then:
       final Finder page = find.byType(CounterDetailsPage);
       expect(page, findsOneWidget);
-      final Finder appbarTitle = find.descendant(of: find.byType(AppBar), matching: find.text(item.name));
-      expect(appbarTitle, findsOneWidget);
       final Finder cardNameLabel = find.text('${'counter_details_page.fields.name'.tr()}: ');
       expect(cardNameLabel, findsOneWidget);
       final Finder cardName = find.descendant(of: find.byType(Card), matching: find.text(item.name));
@@ -94,48 +92,6 @@ void main() {
 
       // then:
       expect(updatedItem, isNull);
-    });
-  });
-
-  testWidgets('should delete item after confirm', (WidgetTester tester) async {
-    await tester.runAsync(() async {
-      // given:
-      // when:
-      await tester.pumpWidget(app);
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
-      final Finder deleteIcon = find.byIcon(Icons.delete);
-      await tester.tap(deleteIcon);
-      await tester.pumpAndSettle();
-      final Finder delete = find.text('counter_details_page.dialogs.delete_counter.delete'.tr());
-      await tester.tap(delete);
-      await tester.pumpAndSettle();
-
-
-      // then:
-      expect(deletedItem, isNotNull);
-      expect(deletedItem!.guid, item.guid);
-    });
-  });
-
-  testWidgets('should not delete item on cancel', (WidgetTester tester) async {
-    await tester.runAsync(() async {
-      // given:
-      // when:
-      await tester.pumpWidget(app);
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
-      final Finder deleteIcon = find.byIcon(Icons.delete);
-      await tester.tap(deleteIcon);
-      await tester.pumpAndSettle();
-      final Finder cancel = find.text('counter_details_page.dialogs.delete_counter.cancel'.tr());
-      await tester.tap(cancel);
-      await tester.pumpAndSettle();
-
-      // then:
-      expect(deletedItem, isNull);
     });
   });
 }

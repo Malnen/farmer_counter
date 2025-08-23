@@ -1,5 +1,5 @@
 {
-  "counter_page": {
+  "counters_page": {
     "no_items": "Brak pozycji",
     "add_counter": "Dodaj licznik",
     "dialogs": {
@@ -10,6 +10,10 @@
         "counter_cancel_label": "Anuluj"
       }
     }
+  },
+  "counter_page": {
+    "details_tab_title": "Szczegóły",
+    "notes_tab_title": "Notatki"
   },
   "counter_details_page": {
     "title": "Szczegóły licznika",

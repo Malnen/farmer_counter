@@ -1,5 +1,5 @@
 import 'package:farmer_counter/widgets/app_main.dart';
-import 'package:farmer_counter/widgets/counters/counters_page.dart';
+import 'package:farmer_counter/widgets/pages/counters_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
