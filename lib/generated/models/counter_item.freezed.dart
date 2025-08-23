@@ -18,6 +18,7 @@ mixin _$CounterItem {
   String get name;
   int get count;
   DateTime get createdAt;
+  Id get id;
 
   /// Create a copy of CounterItem
   /// with the given fields replaced by the non-null parameter values.
@@ -35,15 +36,18 @@ mixin _$CounterItem {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.count, count) || other.count == count) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.id, id) || other.id == id));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, guid, name, count, createdAt);
+  int get hashCode =>
+      Object.hash(runtimeType, guid, name, count, createdAt, id);
 
   @override
   String toString() {
-    return 'CounterItem(guid: $guid, name: $name, count: $count, createdAt: $createdAt)';
+    return 'CounterItem(guid: $guid, name: $name, count: $count, createdAt: $createdAt, id: $id)';
   }
 }
 
@@ -53,7 +57,7 @@ abstract mixin class $CounterItemCopyWith<$Res> {
           CounterItem value, $Res Function(CounterItem) _then) =
       _$CounterItemCopyWithImpl;
   @useResult
-  $Res call({String guid, String name, int count, DateTime createdAt});
+  $Res call({String guid, String name, int count, DateTime createdAt, int id});
 }
 
 /// @nodoc
@@ -72,6 +76,7 @@ class _$CounterItemCopyWithImpl<$Res> implements $CounterItemCopyWith<$Res> {
     Object? name = null,
     Object? count = null,
     Object? createdAt = null,
+    Object? id = null,
   }) {
     return _then(CounterItem(
       guid: null == guid
@@ -90,6 +95,10 @@ class _$CounterItemCopyWithImpl<$Res> implements $CounterItemCopyWith<$Res> {
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }

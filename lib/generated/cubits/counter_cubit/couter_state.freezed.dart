@@ -15,6 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CounterState {
   List<CounterItem> get items;
+  CounterStatus get status;
 
   /// Create a copy of CounterState
   /// with the given fields replaced by the non-null parameter values.
@@ -29,16 +30,17 @@ mixin _$CounterState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is CounterState &&
-            const DeepCollectionEquality().equals(other.items, items));
+            const DeepCollectionEquality().equals(other.items, items) &&
+            (identical(other.status, status) || other.status == status));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(items));
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(items), status);
 
   @override
   String toString() {
-    return 'CounterState(items: $items)';
+    return 'CounterState(items: $items, status: $status)';
   }
 }
 
@@ -48,7 +50,7 @@ abstract mixin class $CounterStateCopyWith<$Res> {
           CounterState value, $Res Function(CounterState) _then) =
       _$CounterStateCopyWithImpl;
   @useResult
-  $Res call({List<CounterItem> items});
+  $Res call({List<CounterItem> items, CounterStatus status});
 }
 
 /// @nodoc
@@ -64,12 +66,17 @@ class _$CounterStateCopyWithImpl<$Res> implements $CounterStateCopyWith<$Res> {
   @override
   $Res call({
     Object? items = null,
+    Object? status = null,
   }) {
     return _then(CounterState(
       items: null == items
           ? _self.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<CounterItem>,
+      status: null == status
+          ? _self.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as CounterStatus,
     ));
   }
 }

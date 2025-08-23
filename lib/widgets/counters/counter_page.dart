@@ -5,13 +5,14 @@ import 'package:farmer_counter/widgets/counters/counter_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:get_it/get_it.dart';
 
 class CounterPage extends HookWidget {
   const CounterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final CounterCubit cubit = useMemoized(CounterCubit.new);
+    final CounterCubit cubit = useMemoized(() => CounterCubit(GetIt.instance.get()));
     useEffect(() {
       return cubit.close;
     }, <Object?>[cubit]);
@@ -25,6 +26,12 @@ class CounterPage extends HookWidget {
             Expanded(
               child: BlocBuilder<CounterCubit, CounterState>(
                 builder: (BuildContext context, CounterState state) {
+                  if (state.status == CounterStatus.initial) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
                   final List<CounterItem> items = state.items;
                   if (items.isEmpty) {
                     return const Center(child: Text('No items'));
