@@ -1,5 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:farmer_counter/widgets/counters/counter_card.dart';
-import 'package:farmer_counter/widgets/counters/counter_page.dart';
+import 'package:farmer_counter/widgets/counters/counters_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,7 +12,7 @@ void main() {
   setUp(() {
     app = TestMaterialApp(
       home: Scaffold(
-        body: CounterPage(),
+        body: CountersPage(),
       ),
     );
   });
@@ -26,9 +27,9 @@ void main() {
       await tester.pumpAndSettle();
 
       // then:
-      final Finder counterPage = find.byType(CounterPage);
+      final Finder counterPage = find.byType(CountersPage);
       expect(counterPage, findsOneWidget);
-      final Finder noItemsText = find.text('No items');
+      final Finder noItemsText = find.text('counter_page.no_items'.tr());
       expect(noItemsText, findsOneWidget);
     });
   });
@@ -49,8 +50,9 @@ void main() {
       final Finder name = find.byType(TextField);
       await tester.enterText(name, 'test');
       await tester.pumpAndSettle();
-      final Finder add = find.text('Add');
+      final Finder add = find.text('counter_page.dialogs.add_counter_dialog.counter_add_label'.tr());
       await tester.tap(add);
+      await pumpEventQueue();
       await pumpEventQueue();
       await pumpEventQueue();
       await tester.pumpAndSettle();
@@ -75,8 +77,9 @@ void main() {
       final Finder name = find.byType(TextField);
       await tester.enterText(name, 'test');
       await tester.pumpAndSettle();
-      final Finder cancel = find.text('Cancel');
+      final Finder cancel = find.text('counter_page.dialogs.add_counter_dialog.counter_cancel_label'.tr());
       await tester.tap(cancel);
+      await pumpEventQueue();
       await pumpEventQueue();
       await pumpEventQueue();
       await tester.pumpAndSettle();

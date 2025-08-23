@@ -10,5 +10,38 @@
         "counter_cancel_label": "Anuluj"
       }
     }
+  },
+  "counter_details_page": {
+    "title": "Szczegóły licznika",
+    "fields": {
+      "name": "Nazwa",
+      "count": "Liczba",
+      "created_at": "Utworzono o"
+    },
+    "actions": {
+      "edit": "Edytuj",
+      "delete": "Usuń"
+    },
+    "snackbar": {
+      "deleted": "Licznik \"{name}\" został pomyślnie usunięty",
+      "ok": "OK"
+    },
+    "dialogs": {
+      "edit_name": {
+        "title": "Edytuj nazwę",
+        "name_label": "Nazwa",
+        "save": "Zapisz",
+        "cancel": "Anuluj"
+      },
+      "delete_counter": {
+        "title": "Usuń licznik",
+        "message": "Czy na pewno chcesz usunąć ten licznik? Tej czynności nie można cofnąć.",
+        "delete": "Usuń",
+        "cancel": "Anuluj"
+      }
+    },
+    "history": {
+      "no_items": "Brak pozycji"
+    }
   }
 }

@@ -15,6 +15,7 @@ dependencies:
   freezed_annotation: 3.1.0
   flutter_hooks: 0.21.3+1
   hooked_bloc: 1.7.0
+  intl: 0.20.2
   isar_community: 3.2.0-dev.2
   isar_community_flutter_libs: 3.2.0-dev.2
   json_annotation: 4.9.0

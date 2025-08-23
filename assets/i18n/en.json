@@ -10,5 +10,38 @@
         "counter_cancel_label": "Cancel"
       }
     }
+  },
+  "counter_details_page": {
+    "title": "Counter Details",
+    "fields": {
+      "name": "Name",
+      "count": "Count",
+      "created_at": "Created At"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "snackbar": {
+      "deleted": "Counter \"{name}\" deleted successfully",
+      "ok": "OK"
+    },
+    "dialogs": {
+      "edit_name": {
+        "title": "Edit Name",
+        "name_label": "Name",
+        "save": "Save",
+        "cancel": "Cancel"
+      },
+      "delete_counter": {
+        "title": "Delete Counter",
+        "message": "Are you sure you want to delete this counter? This action cannot be undone.",
+        "delete": "Delete",
+        "cancel": "Cancel"
+      }
+    },
+    "history": {
+      "no_items": "No items"
+    }
   }
 }

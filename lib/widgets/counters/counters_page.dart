@@ -3,12 +3,13 @@ import 'package:farmer_counter/cubits/counter_cubit/counter_cubit.dart';
 import 'package:farmer_counter/cubits/counter_cubit/couter_state.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:farmer_counter/widgets/counters/counter_card.dart';
+import 'package:farmer_counter/widgets/counters/counter_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class CounterPage extends HookWidget {
-  const CounterPage({super.key});
+class CountersPage extends HookWidget {
+  const CountersPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,21 +44,30 @@ class CounterPage extends HookWidget {
                     itemCount: items.length,
                     itemBuilder: (BuildContext context, int index) {
                       final CounterItem item = items[index];
-                      return Dismissible(
-                        key: Key(item.guid),
-                        background: Container(
-                          color: Theme.of(context).colorScheme.errorContainer,
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: const Icon(Icons.delete),
+                      return InkWell(
+                        splashFactory: NoSplash.splashFactory,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => CounterDetailsPage(
+                              item: items[index],
+                              onUpdate: cubit.updateItem,
+                              onDelete: (CounterItem item) => cubit.removeItem(
+                                item.guid,
+                                afterDelete: () => ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      tr('counter_details_page.snackbar.deleted', namedArgs: <String, String>{'name': item.name}),
+                                    ),
+                                    action: SnackBarAction(
+                                      label: tr('counter_details_page.snackbar.ok'),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                        secondaryBackground: Container(
-                          color: Theme.of(context).colorScheme.errorContainer,
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: const Icon(Icons.delete),
-                        ),
-                        onDismissed: (_) => cubit.removeItem(item.guid),
                         child: CounterCard(
                           name: item.name,
                           count: item.count,

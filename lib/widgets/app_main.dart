@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:farmer_counter/widgets/counters/counter_page.dart';
+import 'package:farmer_counter/widgets/counters/counters_page.dart';
 import 'package:flutter/material.dart';
 
 class AppMain extends StatelessWidget {
@@ -28,7 +28,7 @@ class AppMain extends StatelessWidget {
           supportedLocales: context.supportedLocales,
           localizationsDelegates: context.localizationDelegates,
           debugShowCheckedModeBanner: false,
-          home: const CounterPage(),
+          home: const CountersPage(),
         ),
       ),
     );

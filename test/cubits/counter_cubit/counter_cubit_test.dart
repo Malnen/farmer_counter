@@ -141,4 +141,39 @@ void main() {
       expect(cubit.state.items.first.name, 'Seed');
     },
   );
+
+  blocTest<CounterCubit, CounterState>(
+    'updateItem does nothing if guid does not exist',
+    build: CounterCubit.new,
+    act: (CounterCubit cubit) async {
+      final CounterItem fake = CounterItem.create(name: 'Fake');
+      await cubit.updateItem(fake);
+      await pumpEventQueue();
+    },
+    verify: (CounterCubit cubit) async {
+      expect(cubit.state.items, isEmpty);
+      final List<CounterItem> all = await isar.counterItems.where().findAll();
+      expect(all, isEmpty);
+    },
+  );
+
+  blocTest<CounterCubit, CounterState>(
+    'updateItem updates name',
+    build: CounterCubit.new,
+    act: (CounterCubit cubit) async {
+      await cubit.addItem('Original');
+      final CounterItem existing = cubit.state.items.first;
+      final CounterItem updated = existing.copyWith(name: 'Updated');
+      await cubit.updateItem(updated);
+      await pumpEventQueue();
+    },
+    verify: (CounterCubit cubit) async {
+      expect(cubit.state.items.length, 1);
+      expect(cubit.state.items.first.name, 'Updated');
+
+      final List<CounterItem> all = await isar.counterItems.where().findAll();
+      expect(all.length, 1);
+      expect(all.first.name, 'Updated');
+    },
+  );
 }
