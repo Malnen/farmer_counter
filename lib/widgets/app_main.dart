@@ -18,13 +18,16 @@ class AppMain extends StatelessWidget {
       child: Builder(
         builder: (BuildContext context) => MaterialApp(
           locale: context.locale,
+          themeMode: ThemeMode.system,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange, brightness: Brightness.light),
+          ),
+          darkTheme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange, brightness: Brightness.dark),
+          ),
           supportedLocales: context.supportedLocales,
           localizationsDelegates: context.localizationDelegates,
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
-            useMaterial3: true,
-          ),
           home: const CounterPage(),
         ),
       ),
