@@ -1,4 +1,4 @@
-
+import 'package:farmer_counter/widgets/round_icon.dart';
 import 'package:flutter/material.dart';
 
 class CounterCard extends StatelessWidget {
@@ -16,8 +16,7 @@ class CounterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme cs = Theme.of(context).colorScheme;
-
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Card(
       elevation: 1,
       margin: const EdgeInsets.symmetric(vertical: 6),
@@ -26,10 +25,9 @@ class CounterCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Row(
           children: <Widget>[
-            _RoundIcon(
+            RoundIcon(
               icon: Icons.remove,
               onTap: onMinus,
-              semanticLabel: 'Decrease',
             ),
             Expanded(
               child: Column(
@@ -41,63 +39,24 @@ class CounterCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 4),
-                  // Big count under the name
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 180),
-                    transitionBuilder: (child, anim) =>
-                        ScaleTransition(scale: anim, child: child),
+                    transitionBuilder: (Widget child, Animation<double> animation) => ScaleTransition(scale: animation, child: child),
                     child: Text(
                       '$count',
                       key: ValueKey<int>(count),
                       textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall
-                          ?.copyWith(fontWeight: FontWeight.w700, color: cs.primary),
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700, color: colorScheme.primary),
                     ),
                   ),
                 ],
               ),
             ),
-            _RoundIcon(
+            RoundIcon(
               icon: Icons.add,
               onTap: onPlus,
-              semanticLabel: 'Increase',
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _RoundIcon extends StatelessWidget {
-  const _RoundIcon({
-    required this.icon,
-    required this.onTap,
-    required this.semanticLabel,
-  });
-
-  final IconData icon;
-  final VoidCallback onTap;
-  final String semanticLabel;
-
-  @override
-  Widget build(BuildContext context) {
-    final ColorScheme cs = Theme.of(context).colorScheme;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: Material(
-        color: cs.secondaryContainer,
-        shape: const CircleBorder(),
-        child: InkWell(
-          customBorder: const CircleBorder(),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Icon(icon, size: 20, semanticLabel: semanticLabel),
-          ),
         ),
       ),
     );

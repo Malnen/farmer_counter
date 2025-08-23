@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:farmer_counter/models/counter_change_item.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:farmer_counter/widgets/app_main.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,10 @@ Future<void> main() async {
 Future<void> _registerCounterIsar() async {
   final Directory directory = await _getIsarDirectory();
   final Isar isar = await Isar.open(
-    <CollectionSchema<CounterItem>>[CounterItemSchema],
+    <CollectionSchema<Object?>>[
+      CounterItemSchema,
+      CounterChangeItemSchema,
+    ],
     directory: directory.path,
   );
 

@@ -5,22 +5,21 @@ import 'package:farmer_counter/widgets/counters/counter_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:get_it/get_it.dart';
 
 class CounterPage extends HookWidget {
   const CounterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final CounterCubit cubit = useMemoized(() => CounterCubit(GetIt.instance.get()));
-    useEffect(() {
-      return cubit.close;
-    }, <Object?>[cubit]);
+    final CounterCubit cubit = useMemoized(CounterCubit.new);
+    useEffect(
+      () => cubit.close,
+      <Object?>[cubit],
+    );
 
     return BlocProvider<CounterCubit>.value(
       value: cubit,
       child: Scaffold(
-        appBar: AppBar(title: const Text('Counters')),
         body: Column(
           children: <Widget>[
             Expanded(
@@ -38,7 +37,7 @@ class CounterPage extends HookWidget {
                   }
 
                   return ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 100), // space for FAB
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 100),
                     itemCount: items.length,
                     itemBuilder: (BuildContext context, int index) {
                       final CounterItem item = items[index];

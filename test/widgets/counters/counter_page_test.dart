@@ -1,0 +1,82 @@
+import 'package:farmer_counter/widgets/counters/counter_card.dart';
+import 'package:farmer_counter/widgets/counters/counter_page.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  late Widget app;
+
+  setUp(() {
+    app = MaterialApp(
+      home: Scaffold(
+        body: CounterPage(),
+      ),
+    );
+  });
+
+  testWidgets('should render', (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      // given:
+      // when:
+      await tester.pumpWidget(app);
+      await pumpEventQueue();
+      await tester.pumpAndSettle();
+
+      // then:
+      final Finder counterPage = find.byType(CounterPage);
+      expect(counterPage, findsOneWidget);
+      final Finder noItemsText = find.text('No items');
+      expect(noItemsText, findsOneWidget);
+    });
+  });
+
+  testWidgets('should add item', (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      // given:
+      // when:
+      await tester.pumpWidget(app);
+      await pumpEventQueue();
+      await tester.pumpAndSettle();
+      final Finder fab = find.byType(FloatingActionButton);
+      await tester.tap(fab);
+      await tester.pumpAndSettle();
+      final Finder name = find.byType(TextField);
+      await tester.enterText(name, 'test');
+      await tester.pumpAndSettle();
+      final Finder add = find.text('Add');
+      await tester.tap(add);
+      await pumpEventQueue();
+      await pumpEventQueue();
+      await tester.pumpAndSettle();
+
+      // then:
+      final Finder cards = find.byType(CounterCard);
+      expect(cards, findsOneWidget);
+    });
+  });
+
+  testWidgets('should not add item', (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      // given:
+      // when:
+      await tester.pumpWidget(app);
+      await pumpEventQueue();
+      await tester.pumpAndSettle();
+      final Finder fab = find.byType(FloatingActionButton);
+      await tester.tap(fab);
+      await tester.pumpAndSettle();
+      final Finder name = find.byType(TextField);
+      await tester.enterText(name, 'test');
+      await tester.pumpAndSettle();
+      final Finder cancel = find.text('Cancel');
+      await tester.tap(cancel);
+      await pumpEventQueue();
+      await pumpEventQueue();
+      await tester.pumpAndSettle();
+
+      // then:
+      final Finder cards = find.byType(CounterCard);
+      expect(cards, findsNothing);
+    });
+  });
+}
