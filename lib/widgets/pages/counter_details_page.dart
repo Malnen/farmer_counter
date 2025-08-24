@@ -69,7 +69,6 @@ class CounterDetailsPage extends HookWidget {
 
   Future<void> _editName(BuildContext context, ValueNotifier<CounterItem> itemNotifier) async {
     final TextEditingController controller = TextEditingController(text: itemNotifier.value.name);
-
     final String? newName = await showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(

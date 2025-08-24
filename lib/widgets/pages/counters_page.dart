@@ -36,7 +36,7 @@ class CountersPage extends HookWidget {
 
                   final List<CounterItem> items = state.items;
                   if (items.isEmpty) {
-                    return Center(child: Text('counter_pages.no_items'.tr()));
+                    return Center(child: Text('counters_page.no_items'.tr()));
                   }
 
                   return ListView.builder(
@@ -84,7 +84,7 @@ class CountersPage extends HookWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _showAddDialog(context, cubit),
-          tooltip: 'counter_pages.add_counter'.tr(),
+          tooltip: 'counters_page.add_counter'.tr(),
           child: const Icon(Icons.add),
         ),
       ),
@@ -97,14 +97,14 @@ class CountersPage extends HookWidget {
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: Text('counter_pages.add_counter'.tr()),
+          title: Text('counters_page.add_counter'.tr()),
           content: TextField(
             controller: controller,
             autofocus: true,
             textInputAction: TextInputAction.done,
             decoration: InputDecoration(
-              labelText: 'counter_pages.dialogs.add_counter_dialog.counter_name_label'.tr(),
-              hintText: 'counter_pages.dialogs.add_counter_dialog.counter_name_hint'.tr(),
+              labelText: 'counters_page.dialogs.add_counter_dialog.counter_name_label'.tr(),
+              hintText: 'counters_page.dialogs.add_counter_dialog.counter_name_hint'.tr(),
             ),
             onSubmitted: (_) {
               final String name = controller.text.trim();
@@ -123,7 +123,7 @@ class CountersPage extends HookWidget {
                 controller.clear();
                 Navigator.of(dialogContext).pop();
               },
-              child: Text('counter_pages.dialogs.add_counter_dialog.counter_cancel_label'.tr()),
+              child: Text('counters_page.dialogs.add_counter_dialog.counter_cancel_label'.tr()),
             ),
             FilledButton(
               onPressed: () {
@@ -136,7 +136,7 @@ class CountersPage extends HookWidget {
                 controller.clear();
                 Navigator.of(dialogContext).pop();
               },
-              child: Text('counter_pages.dialogs.add_counter_dialog.counter_add_label'.tr()),
+              child: Text('counters_page.dialogs.add_counter_dialog.counter_add_label'.tr()),
             ),
           ],
         );

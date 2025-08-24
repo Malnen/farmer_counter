@@ -88,6 +88,8 @@ void main() {
       final Finder textField = find.byType(TextField);
       await tester.enterText(textField, 'IgnoredName');
       await tester.tap(find.text('counter_details_page.dialogs.edit_name.cancel'.tr()));
+      await tester.pump();
+      await pumpEventQueue();
       await tester.pumpAndSettle();
 
       // then:

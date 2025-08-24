@@ -47,5 +47,26 @@
     "history": {
       "no_items": "Brak pozycji"
     }
+  },
+  "common": {
+    "add": "Dodaj",
+    "save": "Zapisz",
+    "edit": "Edytuj",
+    "delete": "Usuń",
+    "cancel": "Anuluj"
+  },
+  "counter_notes": {
+    "no_items": "Brak notatek",
+    "add": {
+      "title": "Nowa notatka"
+    },
+    "edit": {
+      "title": "Edytuj notatkę"
+    },
+    "hint": "Wpisz swoją notatkę…",
+    "delete": {
+      "title": "Usuń notatkę",
+      "message": "Czy na pewno chcesz usunąć tę notatkę?"
+    }
   }
 }

@@ -31,6 +31,7 @@ class CounterCard extends StatelessWidget {
             ),
             Expanded(
               child: Column(
+                spacing: 4,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
@@ -38,7 +39,6 @@ class CounterCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  const SizedBox(height: 4),
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 180),
                     transitionBuilder: (Widget child, Animation<double> animation) => ScaleTransition(scale: animation, child: child),

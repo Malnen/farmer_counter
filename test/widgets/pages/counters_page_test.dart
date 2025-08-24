@@ -48,7 +48,7 @@ void main() {
       final Finder name = find.byType(TextField);
       await tester.enterText(name, 'test');
       await tester.pumpAndSettle();
-      final Finder add = find.text('counter_pages.dialogs.add_counter_dialog.counter_add_label'.tr());
+      final Finder add = find.text('counters_page.dialogs.add_counter_dialog.counter_add_label'.tr());
       await tester.tap(add);
       await pumpEventQueue();
       await pumpEventQueue();
@@ -75,7 +75,7 @@ void main() {
       final Finder name = find.byType(TextField);
       await tester.enterText(name, 'test');
       await tester.pumpAndSettle();
-      final Finder cancel = find.text('counter_pages.dialogs.add_counter_dialog.counter_cancel_label'.tr());
+      final Finder cancel = find.text('counters_page.dialogs.add_counter_dialog.counter_cancel_label'.tr());
       await tester.tap(cancel);
       await pumpEventQueue();
       await pumpEventQueue();

@@ -47,5 +47,26 @@
     "history": {
       "no_items": "No items"
     }
+  },
+  "common": {
+    "add": "Add",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+  "counter_notes": {
+    "no_items": "No notes yet",
+    "add": {
+      "title": "New note"
+    },
+    "edit": {
+      "title": "Edit note"
+    },
+    "hint": "Type your note…",
+    "delete": {
+      "title": "Delete note",
+      "message": "Are you sure you want to delete this note?"
+    }
   }
 }
