@@ -31,18 +31,9 @@ class AppMain extends StatelessWidget {
   }
 
   ThemeData _getThemeData(Brightness brightness) => ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange, brightness: brightness),
-        tabBarTheme: TabBarThemeData(
-          indicator: UnderlineTabIndicator(
-            borderSide: BorderSide(
-              width: 3,
-              color: Colors.white,
-            ),
-          ),
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.grey,
-          labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.orange,
+          brightness: brightness,
         ),
       );
 }

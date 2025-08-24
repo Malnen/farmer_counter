@@ -46,7 +46,7 @@ class CounterPage extends HookWidget {
           ),
         ),
         bottomNavigationBar: Container(
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.outlineVariant,
           child: TabBar(
             tabs: <Widget>[
               Tab(icon: Icon(Icons.event_note_outlined), text: 'counter_page.notes_tab_title'.tr()),

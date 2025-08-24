@@ -19,12 +19,13 @@ void main() {
     isar = GetIt.instance.get();
     counterItem = CounterItem.create(name: 'Test Counter');
     app = TestMaterialApp(
-        home: Scaffold(
-      body: ChangeNotifierProvider<ValueNotifier<CounterItem>>(
-        create: (BuildContext context) => ValueNotifier<CounterItem>(counterItem),
-        child: CounterNotesPage(),
+      home: Scaffold(
+        body: ChangeNotifierProvider<ValueNotifier<CounterItem>>(
+          create: (BuildContext context) => ValueNotifier<CounterItem>(counterItem),
+          child: CounterNotesPage(),
+        ),
       ),
-    ));
+    );
   });
 
   testWidgets('adds a note to Isar and shows it in UI', (WidgetTester tester) async {
