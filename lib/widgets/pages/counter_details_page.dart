@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class CounterDetailsPage extends HookWidget {
-  final void Function(CounterItem updatedItem)? onUpdate;
+  final Future<void> Function(CounterItem item)? onUpdate;
   final void Function(CounterItem item)? onDelete;
 
   const CounterDetailsPage({
@@ -53,9 +53,33 @@ class CounterDetailsPage extends HookWidget {
                   ],
                 ),
                 const Divider(),
-                _buildDetailRow('counter_details_page.fields.count'.tr(), itemNotifier.value.count.toString()),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      '${'counter_details_page.fields.count'.tr()}: ',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Text(
+                          itemNotifier.value.count.toString(),
+                          overflow: TextOverflow.visible,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit, size: 18),
+                      onPressed: () => _editCount(context, itemNotifier),
+                      tooltip: 'counter_details_page.actions.edit_count'.tr(),
+                    ),
+                  ],
+                ),
                 const Divider(),
-                _buildDetailRow('counter_details_page.fields.created_at'.tr(), formattedDate),
+                _buildDetailRow(
+                  'counter_details_page.fields.created_at'.tr(),
+                  formattedDate,
+                ),
               ],
             ),
           ),
@@ -75,11 +99,16 @@ class CounterDetailsPage extends HookWidget {
         title: Text('counter_details_page.dialogs.edit_name.title'.tr()),
         content: TextField(
           controller: controller,
-          decoration: InputDecoration(labelText: 'counter_details_page.dialogs.edit_name.name_label'.tr()),
+          decoration: InputDecoration(
+            labelText: 'counter_details_page.dialogs.edit_name.name_label'.tr(),
+          ),
           autofocus: true,
         ),
         actions: <Widget>[
-          TextButton(onPressed: () => Navigator.pop(context), child: Text('counter_details_page.dialogs.edit_name.cancel'.tr())),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('counter_details_page.dialogs.edit_name.cancel'.tr()),
+          ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, controller.text.trim()),
             child: Text('counter_details_page.dialogs.edit_name.save'.tr()),
@@ -89,8 +118,47 @@ class CounterDetailsPage extends HookWidget {
     );
 
     if (newName != null && newName.isNotEmpty && newName != itemNotifier.value.name) {
-      itemNotifier.value = itemNotifier.value.copyWith(name: newName);
-      onUpdate?.call(itemNotifier.value);
+      final CounterItem newValue = itemNotifier.value.copyWith(name: newName);
+      await onUpdate?.call(newValue).then((_) => itemNotifier.value = newValue);
+    }
+  }
+
+  Future<void> _editCount(BuildContext context, ValueNotifier<CounterItem> itemNotifier) async {
+    final TextEditingController controller = TextEditingController(
+      text: itemNotifier.value.count.toString(),
+    );
+
+    final int? newCount = await showDialog<int>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text('counter_details_page.dialogs.edit_count.title'.tr()),
+        content: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            labelText: 'counter_details_page.dialogs.edit_count.count_label'.tr(),
+          ),
+          keyboardType: TextInputType.number,
+          autofocus: true,
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('counter_details_page.dialogs.edit_count.cancel'.tr()),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final int? parsed = int.tryParse(controller.text.trim());
+              Navigator.pop(context, parsed);
+            },
+            child: Text('counter_details_page.dialogs.edit_count.save'.tr()),
+          ),
+        ],
+      ),
+    );
+
+    if (newCount != null && newCount != itemNotifier.value.count) {
+      final CounterItem newValue = itemNotifier.value.copyWith(count: newCount);
+      await onUpdate?.call(newValue).then((_) => itemNotifier.value = newValue);
     }
   }
 

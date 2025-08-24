@@ -13,7 +13,8 @@
   },
   "counter_page": {
     "details_tab_title": "Szczegóły",
-    "notes_tab_title": "Notatki"
+    "notes_tab_title": "Notatki",
+    "summary_tab_title": "Podsumowanie"
   },
   "counter_details_page": {
     "title": "Szczegóły licznika",
@@ -37,6 +38,12 @@
         "save": "Zapisz",
         "cancel": "Anuluj"
       },
+      "edit_count": {
+        "title": "Edytuj licznik",
+        "count_label": "Wartość licznika",
+        "cancel": "Anuluj",
+        "save": "Zapisz"
+      },
       "delete_counter": {
         "title": "Usuń licznik",
         "message": "Czy na pewno chcesz usunąć ten licznik? Tej czynności nie można cofnąć.",
@@ -45,7 +52,10 @@
       }
     },
     "history": {
-      "no_items": "Brak pozycji"
+      "no_items": "Brak pozycji",
+      "value": "Wartość",
+      "difference": "Różnica",
+      "date": "Data"
     }
   },
   "common": {
@@ -68,5 +78,21 @@
       "title": "Usuń notatkę",
       "message": "Czy na pewno chcesz usunąć tę notatkę?"
     }
+  },
+  "counter_summary_card": {
+    "today": "Dzisiaj",
+    "last_week": "Ostatni Tydzień",
+    "last_month": "Ostatni Miesiąc",
+    "last_year": "Ostatni Rok",
+    "three_months": "3 miesiące",
+    "six_months": "6 miesięcy",
+    "custom": "Zakres niestandardowy",
+    "start": "Początek",
+    "end": "Koniec",
+    "added": "Dodane",
+    "removed": "Odjęte"
+  },
+  "counter_summary_graph": {
+    "no_data": "Brak danych"
   }
 }

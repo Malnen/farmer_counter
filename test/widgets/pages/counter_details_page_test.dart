@@ -20,7 +20,7 @@ void main() {
       home: ChangeNotifierProvider<ValueNotifier<CounterItem>>(
         create: (BuildContext context) => ValueNotifier<CounterItem>(item),
         child: CounterDetailsPage(
-          onUpdate: (CounterItem item) => updatedItem = item,
+          onUpdate: (CounterItem item) async => updatedItem = item,
         ),
       ),
     );
@@ -60,7 +60,7 @@ void main() {
       await pumpEventQueue();
       await tester.pumpAndSettle();
       final Finder edit = find.byIcon(Icons.edit);
-      await tester.tap(edit);
+      await tester.tap(edit.first);
       await tester.pumpAndSettle();
       final Finder textField = find.byType(TextField);
       await tester.enterText(textField, 'UpdatedName');
@@ -83,7 +83,7 @@ void main() {
       await pumpEventQueue();
       await tester.pumpAndSettle();
       final Finder edit = find.byIcon(Icons.edit);
-      await tester.tap(edit);
+      await tester.tap(edit.first);
       await tester.pumpAndSettle();
       final Finder textField = find.byType(TextField);
       await tester.enterText(textField, 'IgnoredName');
@@ -95,5 +95,50 @@ void main() {
       // then:
       expect(updatedItem, isNull);
     });
+  });  testWidgets('should edit count', (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      // given:
+      // when:
+      await tester.pumpWidget(app);
+      await tester.pump();
+      await pumpEventQueue();
+      await tester.pumpAndSettle();
+      final Finder editCount = find.byIcon(Icons.edit).last;
+      await tester.tap(editCount);
+      await tester.pumpAndSettle();
+      final Finder textField = find.byType(TextField);
+      await tester.enterText(textField, '42');
+      final Finder save = find.text('counter_details_page.dialogs.edit_count.save'.tr());
+      await tester.tap(save);
+      await tester.pump();
+      await pumpEventQueue();
+      await tester.pumpAndSettle();
+
+      // then:
+      expect(updatedItem, isNotNull);
+      expect(updatedItem!.count, 42);
+    });
   });
+
+  testWidgets('should cancel edit count', (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      // given:
+      // when:
+      await tester.pumpWidget(app);
+      await tester.pump();
+      await pumpEventQueue();
+      await tester.pumpAndSettle();
+      final Finder editCount = find.byIcon(Icons.edit).last;
+      await tester.tap(editCount);
+      await tester.pumpAndSettle();
+      final Finder textField = find.byType(TextField);
+      await tester.enterText(textField, '99');
+      await tester.tap(find.text('counter_details_page.dialogs.edit_count.cancel'.tr()));
+      await tester.pumpAndSettle();
+
+      // then:
+      expect(updatedItem, isNull);
+    });
+  });
+
 }

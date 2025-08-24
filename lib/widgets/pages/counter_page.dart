@@ -2,13 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:farmer_counter/widgets/pages/counter_details_page.dart';
 import 'package:farmer_counter/widgets/pages/counter_notes_page.dart';
+import 'package:farmer_counter/widgets/pages/counter_summary_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
 
 class CounterPage extends HookWidget {
   final CounterItem item;
-  final void Function(CounterItem updatedItem)? onUpdate;
+  final Future<void> Function(CounterItem item)? onUpdate;
   final void Function(CounterItem item)? onDelete;
 
   const CounterPage({
@@ -22,7 +23,7 @@ class CounterPage extends HookWidget {
     final ValueNotifier<CounterItem> itemNotifier = useState(item);
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text(itemNotifier.value.name),
@@ -37,6 +38,7 @@ class CounterPage extends HookWidget {
           value: itemNotifier,
           child: TabBarView(
             children: <Widget>[
+              CounterSummaryPage(),
               CounterNotesPage(),
               CounterDetailsPage(
                 onUpdate: onUpdate,
@@ -49,6 +51,7 @@ class CounterPage extends HookWidget {
           color: Theme.of(context).colorScheme.outlineVariant,
           child: TabBar(
             tabs: <Widget>[
+              Tab(icon: Icon(Icons.auto_graph_outlined), text: 'counter_page.summary_tab_title'.tr()),
               Tab(icon: Icon(Icons.event_note_outlined), text: 'counter_page.notes_tab_title'.tr()),
               Tab(icon: Icon(Icons.info), text: 'counter_page.details_tab_title'.tr()),
             ],

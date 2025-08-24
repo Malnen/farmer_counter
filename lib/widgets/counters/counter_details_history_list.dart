@@ -18,6 +18,7 @@ class CounterDetailsHistoryList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<CounterItem> item = context.read();
+    useValueListenable(item);
     final ValueNotifier<List<CounterChangeItem>> history = useState<List<CounterChangeItem>>(<CounterChangeItem>[]);
     final ValueNotifier<bool> isLoading = useState(false);
     final ValueNotifier<bool> hasMore = useState(true);
@@ -26,10 +27,14 @@ class CounterDetailsHistoryList extends HookWidget {
 
     useEffect(
       () {
+        history.value = <CounterChangeItem>[];
+        offset.value = 0;
+        hasMore.value = true;
         _loadMore(item, history, isLoading, hasMore, offset);
+
         return null;
       },
-      <Object?>[item.value.guid],
+      <Object?>[item.value.count],
     );
 
     useEffect(
@@ -84,11 +89,12 @@ class CounterDetailsHistoryList extends HookWidget {
               color: change.delta >= 0 ? Colors.green : Colors.red,
             ),
             title: Text(
-              '${change.newValue}',
+              '${'counter_details_page.history.value'.tr()}: ${change.newValue}',
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             subtitle: Text(
-              DateFormat('yyyy-MM-dd HH:mm').format(change.at),
+              '${'counter_details_page.history.difference'.tr()}: ${change.delta >= 0 ? '+' : ''}${change.delta}\n'
+              '${'counter_details_page.history.date'.tr()}: ${DateFormat('yyyy-MM-dd HH:mm').format(change.at)}',
             ),
           );
         },

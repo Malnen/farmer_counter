@@ -25,6 +25,7 @@ class CountersPage extends HookWidget {
         appBar: AppBar(),
         body: Column(
           children: <Widget>[
+            //    TextButton(onPressed: () => CounterDataGenerator(GetIt.instance.get()).generateCounters(itemCount: 1), child: Text('Generate')),
             Expanded(
               child: BlocBuilder<CounterCubit, CounterState>(
                 builder: (BuildContext context, CounterState state) {

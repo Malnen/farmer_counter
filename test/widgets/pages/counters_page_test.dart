@@ -53,6 +53,7 @@ void main() {
       await pumpEventQueue();
       await pumpEventQueue();
       await pumpEventQueue();
+      await pumpEventQueue();
       await tester.pumpAndSettle();
 
       // then:

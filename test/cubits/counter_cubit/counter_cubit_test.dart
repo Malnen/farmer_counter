@@ -156,7 +156,6 @@ void main() {
       expect(all, isEmpty);
     },
   );
-
   blocTest<CounterCubit, CounterState>(
     'updateItem updates name',
     build: CounterCubit.new,
@@ -170,10 +169,36 @@ void main() {
     verify: (CounterCubit cubit) async {
       expect(cubit.state.items.length, 1);
       expect(cubit.state.items.first.name, 'Updated');
-
       final List<CounterItem> all = await isar.counterItems.where().findAll();
       expect(all.length, 1);
       expect(all.first.name, 'Updated');
+      final List<CounterChangeItem> hist = await history(all.first.guid);
+      expect(hist.length, 1);
+      expect(hist.first.delta, 0);
     },
   );
+
+  blocTest<CounterCubit, CounterState>(
+    'updateItem updates count and appends history delta',
+    build: CounterCubit.new,
+    act: (CounterCubit cubit) async {
+      await cubit.addItem('Counter');
+      final CounterItem existing = cubit.state.items.first;
+      final CounterItem updated = existing.copyWith(count: 10);
+      await cubit.updateItem(updated);
+      await pumpEventQueue();
+    },
+    verify: (CounterCubit cubit) async {
+      expect(cubit.state.items.length, 1);
+      expect(cubit.state.items.first.count, 10);
+      final String guid = cubit.state.items.first.guid;
+      final List<CounterItem> all = await isar.counterItems.where().findAll();
+      expect(all.length, 1);
+      expect(all.first.count, 10);
+      final List<CounterChangeItem> hist = await history(guid);
+      expect(hist.length, 2);
+      expect(hist.any((CounterChangeItem h) => h.delta == 10 && h.newValue == 10), isTrue);
+    },
+  );
+
 }

@@ -13,7 +13,8 @@
   },
   "counter_page": {
     "details_tab_title": "Details",
-    "notes_tab_title": "Notes"
+    "notes_tab_title": "Notes",
+    "summary_tab_title": "Summary"
   },
   "counter_details_page": {
     "title": "Counter Details",
@@ -37,6 +38,12 @@
         "save": "Save",
         "cancel": "Cancel"
       },
+      "edit_count": {
+        "title": "Edit Counter Count",
+        "count_label": "Counter Value",
+        "cancel": "Cancel",
+        "save": "Save"
+      },
       "delete_counter": {
         "title": "Delete Counter",
         "message": "Are you sure you want to delete this counter? This action cannot be undone.",
@@ -45,7 +52,10 @@
       }
     },
     "history": {
-      "no_items": "No items"
+      "no_items": "No items",
+      "value": "Value",
+      "difference": "Difference",
+      "date": "Date"
     }
   },
   "common": {
@@ -68,5 +78,21 @@
       "title": "Delete note",
       "message": "Are you sure you want to delete this note?"
     }
+  },
+  "counter_summary_card": {
+    "today": "Today",
+    "last_week": "Last Week",
+    "last_month": "Last Month",
+    "last_year": "Last Year",
+    "three_months": "3 Months",
+    "six_months": "6 Months",
+    "custom": "Custom Range",
+    "start": "Start",
+    "end": "End",
+    "added": "Added",
+    "removed": "Removed"
+  },
+  "counter_summary_graph": {
+    "no_data": "No data"
   }
 }

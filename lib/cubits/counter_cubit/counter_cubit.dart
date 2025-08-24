@@ -57,8 +57,17 @@ class CounterCubit extends Cubit<CounterState> {
 
     await isar.writeTxn(() async {
       await isar.counterItems.put(updatedItem);
-    });
+      if (existing.count != updatedItem.count) {
+        final int delta = updatedItem.count - existing.count;
+        final CounterChangeItem change = CounterChangeItem.create(
+          counterGuid: updatedItem.guid,
+          delta: delta,
+          newValue: updatedItem.count,
+        );
 
+        await isar.counterChangeItems.put(change);
+      }
+    });
     emit(
       state.copyWith(
         items: state.items.map((CounterItem item) => item.guid == updatedItem.guid ? updatedItem : item).toList(),
