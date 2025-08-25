@@ -44,6 +44,10 @@ dev_dependencies:
   isar_community_generator: 3.2.0-dev.2
   json_serializable: 6.9.4
   mocktail: 1.0.4
+  flutter_launcher_icons: 0.14.4
+flutter_icons:
+    android: true
+    image_path: "assets/icon/app_icon.png"
 
 flutter:
   uses-material-design: true
