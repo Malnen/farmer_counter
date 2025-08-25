@@ -1,4 +1,8 @@
 {
+  "app_main": {
+    "counters": "Counters",
+    "settings": "Settings"
+  },
   "counters_page": {
     "no_items": "No items",
     "add_counter": "Add counter",
@@ -94,5 +98,33 @@
   },
   "counter_summary_graph": {
     "no_data": "No data"
+  },
+  "drive_sync": {
+    "conflict": {
+      "title": "Sync conflict",
+      "message": "Select which version to keep",
+      "keep_drive": "Keep Drive",
+      "keep_local": "Keep Local",
+      "keep_both": "Keep Both"
+    }
+  },
+  "settings": {
+    "drive": {
+      "connected_title": "Connected to Google Drive",
+      "not_connected_title": "Not connected to Google Drive",
+      "sync_now": "Sync now",
+      "sync_triggered": "Sync triggered",
+      "disconnect": "Disconnect",
+      "disconnect_confirm": {
+        "title": "Disconnect from Drive?",
+        "message": "Your data will stop syncing.",
+        "cancel": "Cancel",
+        "confirm": "Disconnect"
+      },
+      "connect": "Connect",
+      "connected_snackbar": "Connected to Drive",
+      "failed_snackbar": "Failed to connect",
+      "disconnected_snackbar": "Disconnected"
+    }
   }
 }

@@ -37,7 +37,7 @@ class CounterCard extends StatelessWidget {
                   Text(
                     name,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 180),
@@ -46,7 +46,7 @@ class CounterCard extends StatelessWidget {
                       '$count',
                       key: ValueKey<int>(count),
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700, color: colorScheme.primary),
+                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.w700, color: colorScheme.primary),
                     ),
                   ),
                 ],

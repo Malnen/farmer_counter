@@ -16,15 +16,15 @@ class RoundIcon extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6),
       child: Material(
         color: colorScheme.secondaryContainer,
-        shape: const CircleBorder(),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
         child: InkWell(
-          customBorder: const CircleBorder(),
+          customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Icon(
               icon,
-              size: 20,
+              size: 32,
             ),
           ),
         ),

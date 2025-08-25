@@ -1,4 +1,8 @@
 {
+  "app_main": {
+    "counters": "Liczniki",
+    "settings": "Ustawienia"
+  },
   "counters_page": {
     "no_items": "Brak pozycji",
     "add_counter": "Dodaj licznik",
@@ -94,5 +98,33 @@
   },
   "counter_summary_graph": {
     "no_data": "Brak danych"
+  },
+  "drive_sync": {
+    "conflict": {
+      "title": "Konflikt synchronizacji",
+      "message": "Wybierz wersję do zachowania",
+      "keep_drive": "Zachowaj dane z dysku",
+      "keep_local": "Zachowaj dane lokalne",
+      "keep_both": "Zachowaj obie wersje"
+    }
+  },
+  "settings": {
+    "drive": {
+      "connected_title": "Połączono z Dyskiem Google",
+      "not_connected_title": "Nie połączono z Dyskiem Google",
+      "sync_now": "Synchronizuj teraz",
+      "sync_triggered": "Synchronizacja uruchomiona",
+      "disconnect": "Rozłącz",
+      "disconnect_confirm": {
+        "title": "Odłączyć od Dysku?",
+        "message": "Synchronizacja danych zostanie zatrzymana.",
+        "cancel": "Anuluj",
+        "confirm": "Rozłącz"
+      },
+      "connect": "Połącz",
+      "connected_snackbar": "Połączono z Dyskiem",
+      "failed_snackbar": "Nie udało się połączyć",
+      "disconnected_snackbar": "Rozłączono"
+    }
   }
 }
