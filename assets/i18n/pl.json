@@ -124,16 +124,16 @@
       "connect": "Połącz",
       "connected_snackbar": "Połączono z Dyskiem",
       "failed_snackbar": "Nie udało się połączyć",
-      "disconnected_snackbar": "Rozłączono",
-      "tabBarSize": {
-        "title": "Rozmiar paska",
-        "smaller": "Mniejszy",
-        "larger": "Większy",
-        "current": "Aktualnie: {x}%"
-      },
-      "plusMinusOrder": {
-        "title": "Zamień przyciski + i −"
-      }
+      "disconnected_snackbar": "Rozłączono"
+    },
+    "tabBarSize": {
+      "title": "Rozmiar paska",
+      "smaller": "Mniejszy",
+      "larger": "Większy",
+      "current": "Aktualnie: {x}%"
+    },
+    "plusMinusOrder": {
+      "title": "Zamień przyciski + i −"
     }
   }
 }
