@@ -6,6 +6,7 @@ import 'package:easy_logger/src/enums.dart';
 import 'package:farmer_counter/models/counter_change_item.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:farmer_counter/models/counter_item_note.dart';
+import 'package:farmer_counter/models/sync_meta.dart';
 import 'package:farmer_counter/utils/drive_client.dart';
 import 'package:farmer_counter/utils/drive_sync_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,7 +35,12 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
     SharedPreferences.setMockInitialValues(<String, Object>{});
     temporary = await Directory.systemTemp.createTemp('farmer_counter_test_');
     isar = await Isar.open(
-      <CollectionSchema<Object?>>[CounterItemSchema, CounterChangeItemSchema, CounterItemNoteSchema],
+      <CollectionSchema<Object?>>[
+        CounterItemSchema,
+        CounterChangeItemSchema,
+        CounterItemNoteSchema,
+        SyncMetaSchema,
+      ],
       directory: temporary.path,
     );
     GetIt.instance.registerSingleton<Isar>(isar);
@@ -54,7 +60,10 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   });
 
   tearDown(() async {
-    await isar.close();
+    if (isar.isOpen) {
+      await isar.close();
+    }
+
     try {
       await temporary.delete(recursive: true);
     } catch (_) {}

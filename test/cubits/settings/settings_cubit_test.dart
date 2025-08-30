@@ -32,7 +32,7 @@ void main() {
         const SettingsState(
           tabBarScale: SettingsState.maxScale,
           swapPlusMinus: false,
-        )
+        ),
       ],
     );
 

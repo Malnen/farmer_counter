@@ -10,14 +10,16 @@ class DriveClient {
   static const String _kAutoSignInKey = 'drive.autoSignInEnabled';
 
   final ValueNotifier<DriveAuthState> authState;
+  final GoogleSignIn googleSignIn;
 
   bool _initialized;
   bool _autoSignInEnabled = false;
   GoogleSignInAccount? _account;
   Map<String, String>? _headers;
 
-  DriveClient()
+  DriveClient({GoogleSignIn? googleSignIn})
       : authState = ValueNotifier<DriveAuthState>(DriveAuthState.disconnected),
+        googleSignIn = googleSignIn ?? GoogleSignIn.instance,
         _initialized = false;
 
   bool get isConnected => authState.value == DriveAuthState.connected;
@@ -27,7 +29,7 @@ class DriveClient {
   Future<bool> connect() async {
     await _ensureInit();
     try {
-      final GoogleSignInAccount account = await GoogleSignIn.instance.authenticate(
+      final GoogleSignInAccount account = await googleSignIn.authenticate(
         scopeHint: <String>[drive.DriveApi.driveFileScope],
       );
       final Map<String, String>? headers = await account.authorizationClient.authorizationHeaders(
@@ -53,7 +55,7 @@ class DriveClient {
 
   Future<void> disconnect() async {
     await _ensureInit();
-    await GoogleSignIn.instance.signOut();
+    await googleSignIn.signOut();
     _account = null;
     _headers = null;
     authState.value = DriveAuthState.disconnected;
@@ -69,7 +71,7 @@ class DriveClient {
       return;
     }
 
-    _account = await GoogleSignIn.instance.attemptLightweightAuthentication();
+    _account = await googleSignIn.attemptLightweightAuthentication();
     if (_account != null) {
       _headers = await _account!.authorizationClient.authorizationHeaders(
         <String>[drive.DriveApi.driveFileScope],
@@ -88,7 +90,7 @@ class DriveClient {
     if (!_initialized) {
       final SharedPreferences preferences = await SharedPreferences.getInstance();
       _autoSignInEnabled = preferences.getBool(_kAutoSignInKey) ?? false;
-      await GoogleSignIn.instance.initialize(
+      await googleSignIn.initialize(
         clientId: '156428963186-onde9hov3jkpf2sjebkoumnvm218t4v9.apps.googleusercontent.com',
         serverClientId: '156428963186-91jv4r0prmp50qu7japfos3v6mobg918.apps.googleusercontent.com',
       );
