@@ -141,12 +141,12 @@
     "more_actions": "More actions",
     "hide_actions": "Hide actions",
     "actions": {
-      "increase": "Increase by amount",
-      "decrease": "Decrease by amount"
+      "increase": "Increase amount",
+      "decrease": "Decrease amount"
     },
     "dialogs": {
-      "increase_title": "Increase by amount",
-      "decrease_title": "Decrease by amount",
+      "increase_title": "Increase amount",
+      "decrease_title": "Decrease amount",
       "amount_label": "Amount",
       "amount_hint": "Enter a number",
       "amount_error": "Please enter a positive number"

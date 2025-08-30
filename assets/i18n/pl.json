@@ -141,12 +141,12 @@
     "more_actions": "Więcej akcji",
     "hide_actions": "Ukryj akcje",
     "actions": {
-      "increase": "Zwiększ o wartość",
-      "decrease": "Zmniejsz o wartość"
+      "increase": "Zwiększ wartość",
+      "decrease": "Zmniejsz wartość"
     },
     "dialogs": {
-      "increase_title": "Zwiększ o wartość",
-      "decrease_title": "Zmniejsz o wartość",
+      "increase_title": "Zwiększ wartość",
+      "decrease_title": "Zmniejsz wartość",
       "amount_label": "Wartość",
       "amount_hint": "Wpisz liczbę",
       "amount_error": "Podaj liczbę dodatnią"
