@@ -49,12 +49,13 @@ void main() {
 
   testWidgets('should call callbacks', (WidgetTester tester) async {
     // given:
-    // when:
     await tester.pumpWidget(app);
     await tester.pumpAndSettle();
     final Finder minus = find.byIcon(Icons.remove);
-    await tester.tap(minus);
     final Finder add = find.byIcon(Icons.add);
+
+    // when:
+    await tester.tap(minus);
     await tester.tap(add);
 
     // then:

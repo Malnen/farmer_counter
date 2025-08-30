@@ -202,4 +202,46 @@ void main() {
     },
   );
 
+  blocTest<CounterCubit, CounterState>(
+    'applyDelta updates count and appends history',
+    build: CounterCubit.new,
+    act: (CounterCubit counterCubit) async {
+      await counterCubit.addItem('Horses');
+      final String counterGuid = counterCubit.state.items.first.guid;
+      await counterCubit.applyDelta(guid: counterGuid, delta: 5);
+      await pumpEventQueue();
+    },
+    verify: (CounterCubit counterCubit) async {
+      final String counterGuid = counterCubit.state.items.first.guid;
+      final CounterItem updatedCounterItem =
+          counterCubit.state.items.firstWhere((CounterItem counterItem) => counterItem.guid == counterGuid);
+      expect(updatedCounterItem.count, 5);
+      final List<CounterChangeItem> counterChangeHistory = await isar.counterChangeItems.filter().counterGuidEqualTo(counterGuid).findAll();
+      expect(counterChangeHistory.length, 2);
+      expect(
+          counterChangeHistory
+              .any((CounterChangeItem counterChangeItem) => counterChangeItem.delta == 5 && counterChangeItem.newValue == 5),
+          isTrue);
+    },
+  );
+
+  blocTest<CounterCubit, CounterState>(
+    'applyDelta with delta 0 does not append history',
+    build: CounterCubit.new,
+    act: (CounterCubit counterCubit) async {
+      await counterCubit.addItem('ZeroDelta');
+      final String counterGuid = counterCubit.state.items.first.guid;
+      await counterCubit.applyDelta(guid: counterGuid, delta: 0);
+      await pumpEventQueue();
+    },
+    verify: (CounterCubit counterCubit) async {
+      final String counterGuid = counterCubit.state.items.first.guid;
+      final CounterItem counterItem = counterCubit.state.items.firstWhere((CounterItem item) => item.guid == counterGuid);
+      expect(counterItem.count, 0);
+      final List<CounterChangeItem> counterChangeHistory = await isar.counterChangeItems.filter().counterGuidEqualTo(counterGuid).findAll();
+      expect(counterChangeHistory.length, 1);
+      expect(counterChangeHistory.first.delta, 0);
+      expect(counterChangeHistory.first.newValue, 0);
+    },
+  );
 }

@@ -90,16 +90,16 @@ class CounterCubit extends Cubit<CounterState> {
     );
   }
 
-  Future<void> increment(String guid) => _applyDelta(guid, 1);
+  Future<void> increment(String guid) => applyDelta(guid: guid, delta: 1);
 
-  Future<void> decrement(String guid) => _applyDelta(guid, -1);
+  Future<void> decrement(String guid) => applyDelta(guid: guid, delta: -1);
 
   Future<void> _loadItems() async {
     final List<CounterItem> items = await _isar.counterItems.where().findAll();
     emit(state.copyWith(items: items, status: CounterStatus.loaded));
   }
 
-  Future<void> _applyDelta(String guid, int delta) async {
+  Future<void> applyDelta({required String guid, required int delta}) async {
     final CounterItem? item = await _isar.counterItems.filter().guidEqualTo(guid).findFirst();
     if (item == null) {
       return;

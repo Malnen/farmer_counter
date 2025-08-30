@@ -62,7 +62,7 @@ void main() {
 
       // then:
       final Finder count = find.text('0');
-      expect(count, findsNWidgets(4));
+      expect(count, findsNWidgets(5));
     });
   });
 

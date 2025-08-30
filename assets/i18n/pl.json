@@ -91,10 +91,11 @@
     "three_months": "3 miesiące",
     "six_months": "6 miesięcy",
     "custom": "Zakres niestandardowy",
-    "start": "Początek",
-    "end": "Koniec",
-    "added": "Dodane",
-    "removed": "Odjęte"
+    "start": "Wartość początkowa",
+    "end": "Wartość końcowa",
+    "added": "Dodane w okresie",
+    "removed": "Odjęte w okresie",
+    "current": "Stan bieżący"
   },
   "counter_summary_graph": {
     "no_data": "Brak danych"
@@ -134,6 +135,21 @@
     },
     "plusMinusOrder": {
       "title": "Zamień przyciski + i −"
+    }
+  },
+  "counter_card": {
+    "more_actions": "Więcej akcji",
+    "hide_actions": "Ukryj akcje",
+    "actions": {
+      "increase": "Zwiększ o wartość",
+      "decrease": "Zmniejsz o wartość"
+    },
+    "dialogs": {
+      "increase_title": "Zwiększ o wartość",
+      "decrease_title": "Zmniejsz o wartość",
+      "amount_label": "Wartość",
+      "amount_hint": "Wpisz liczbę",
+      "amount_error": "Podaj liczbę dodatnią"
     }
   }
 }

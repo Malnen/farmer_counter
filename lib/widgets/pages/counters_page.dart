@@ -78,6 +78,7 @@ class CountersPage extends HookWidget {
                           count: item.count,
                           onMinus: () => cubit.decrement(item.guid),
                           onPlus: () => cubit.increment(item.guid),
+                          onBulkAdjust: (int delta) => cubit.applyDelta(guid: item.guid, delta: delta),
                         ),
                       );
                     },

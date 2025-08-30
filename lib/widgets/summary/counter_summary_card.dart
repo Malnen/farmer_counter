@@ -68,6 +68,21 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
               counterItem.value.name,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
+            ValueListenableBuilder<CounterItem>(
+              valueListenable: counterItem,
+              builder: (_, CounterItem item, __) => Column(
+                children: <Widget>[
+                  Text(
+                    item.count.toString(),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+                  ),
+                  Text(
+                    'counter_summary_card.current'.tr(),
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
             ValueListenableBuilder<bool>(
               valueListenable: isLoading,
               builder: (BuildContext context, bool loading, _) => Column(
@@ -77,13 +92,20 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
                     formatDateRange(),
                     style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      buildStat('counter_summary_card.start'.tr(), counterSummary.value?.startValue, loading),
-                      buildStat('counter_summary_card.end'.tr(), counterSummary.value?.endValue, loading),
-                      buildStat('counter_summary_card.added'.tr(), counterSummary.value?.addedCount, loading),
-                      buildStat('counter_summary_card.removed'.tr(), counterSummary.value?.removedCount, loading),
+                  Table(
+                    children: <TableRow>[
+                      TableRow(
+                        children: <Widget>[
+                          buildStat('counter_summary_card.start'.tr(), counterSummary.value?.startValue, loading),
+                          buildStat('counter_summary_card.end'.tr(), counterSummary.value?.endValue, loading),
+                        ],
+                      ),
+                      TableRow(
+                        children: <Widget>[
+                          buildStat('counter_summary_card.added'.tr(), counterSummary.value?.addedCount, loading),
+                          buildStat('counter_summary_card.removed'.tr(), counterSummary.value?.removedCount, loading),
+                        ],
+                      ),
                     ],
                   ),
                 ],
@@ -164,7 +186,7 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
                   ),
           ),
         ),
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        Text(label, style: const TextStyle(fontSize: 14, color: Colors.grey)),
       ],
     );
   }
@@ -193,9 +215,7 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
 
         widget.onPresetChange?.call(selectedDateRange);
       },
-      child: Text(
-        label,
-      ),
+      child: Text(label),
     );
   }
 
@@ -206,7 +226,6 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
   }) async {
     final List<CounterChangeItem> changes =
         await isar.counterChangeItems.filter().counterGuidEqualTo(counter.guid).and().atBetween(start, end).findAll();
-
     if (changes.isEmpty) {
       return CounterSummary(
         startValue: counter.count,

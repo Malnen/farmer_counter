@@ -91,10 +91,11 @@
     "three_months": "3 Months",
     "six_months": "6 Months",
     "custom": "Custom Range",
-    "start": "Start",
-    "end": "End",
-    "added": "Added",
-    "removed": "Removed"
+    "start": "Start Value",
+    "end": "End Value",
+    "added": "Added in Range",
+    "removed": "Removed in Range",
+    "current": "Current Total"
   },
   "counter_summary_graph": {
     "no_data": "No data"
@@ -134,6 +135,21 @@
     },
     "plusMinusOrder": {
       "title": "Swap + and − buttons"
+    }
+  },
+  "counter_card": {
+    "more_actions": "More actions",
+    "hide_actions": "Hide actions",
+    "actions": {
+      "increase": "Increase by amount",
+      "decrease": "Decrease by amount"
+    },
+    "dialogs": {
+      "increase_title": "Increase by amount",
+      "decrease_title": "Decrease by amount",
+      "amount_label": "Amount",
+      "amount_hint": "Enter a number",
+      "amount_error": "Please enter a positive number"
     }
   }
 }

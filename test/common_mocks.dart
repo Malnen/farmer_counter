@@ -8,6 +8,10 @@ class MockFunction extends Mock {
   void call();
 }
 
+class MockFunctionWithValue<T> extends Mock {
+  void call(T value);
+}
+
 class MockDriveSyncService extends Mock implements DriveSyncService {}
 
 class MockDriveClient extends Mock implements DriveClient {}
