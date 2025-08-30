@@ -87,20 +87,21 @@ void main() {
   );
 
   blocTest<CounterCubit, CounterState>(
-    'decrement at 0 is clamped and does not append history',
+    'decrements below 0',
     build: CounterCubit.new,
     act: (CounterCubit cubit) async {
       await cubit.addItem('Pigs');
       final String guid = cubit.state.items.first.guid;
       await cubit.decrement(guid);
+      await cubit.decrement(guid);
       await pumpEventQueue();
     },
     verify: (CounterCubit cubit) async {
       final String guid = cubit.state.items.first.guid;
-      final CounterItem item = cubit.state.items.firstWhere((CounterItem e) => e.guid == guid);
-      expect(item.count, 0);
+      final CounterItem item = cubit.state.items.firstWhere((CounterItem item) => item.guid == guid);
+      expect(item.count, -2);
       final List<CounterChangeItem> currentHistory = await history(guid);
-      expect(currentHistory.length, 1);
+      expect(currentHistory.length, 3);
     },
   );
 

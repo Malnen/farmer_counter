@@ -1,5 +1,7 @@
+import 'package:farmer_counter/cubits/settings/settings_cubit.dart';
 import 'package:farmer_counter/widgets/counters/counter_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -9,17 +11,22 @@ void main() {
   late Widget app;
   late MockFunction onMinus;
   late MockFunction onPlus;
+  late SettingsCubit settingsCubit;
 
   setUp(() {
     onMinus = MockFunction();
     onPlus = MockFunction();
+    settingsCubit = SettingsCubit();
     app = MaterialApp(
       home: Scaffold(
-        body: CounterCard(
-          name: 'name',
-          count: 5,
-          onMinus: onMinus.call,
-          onPlus: onPlus.call,
+        body: BlocProvider<SettingsCubit>.value(
+          value: settingsCubit,
+          child: CounterCard(
+            name: 'name',
+            count: 5,
+            onMinus: onMinus.call,
+            onPlus: onPlus.call,
+          ),
         ),
       ),
     );
@@ -55,5 +62,46 @@ void main() {
       onMinus.call,
       onPlus.call,
     ]);
+  });
+
+  testWidgets('should render minus then plus by default', (WidgetTester tester) async {
+    // given:
+    // when:
+    await tester.pumpWidget(app);
+    await tester.pumpAndSettle();
+
+    // then:
+    final List<IconData?> icons = tester.widgetList<Icon>(find.byType(Icon)).map((Icon icon) => icon.icon).toList();
+    expect(
+      icons,
+      containsAllInOrder(
+        <IconData>[
+          Icons.remove,
+          Icons.add,
+        ],
+      ),
+    );
+  });
+
+  testWidgets('should render plus then minus when swapped', (WidgetTester tester) async {
+    // given:
+    settingsCubit.setSwapPlusMinus(true);
+
+    // when:
+    await tester.pumpWidget(app);
+    await tester.pumpAndSettle();
+    await tester.pumpAndSettle();
+
+    // then:
+    final List<IconData?> icons = tester.widgetList<Icon>(find.byType(Icon)).map((Icon i) => i.icon).toList();
+    expect(
+      icons,
+      containsAllInOrder(
+        <IconData>[
+          Icons.add,
+          Icons.remove,
+        ],
+      ),
+    );
   });
 }

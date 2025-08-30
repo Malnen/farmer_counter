@@ -125,6 +125,15 @@
       "connected_snackbar": "Connected to Drive",
       "failed_snackbar": "Failed to connect",
       "disconnected_snackbar": "Disconnected"
+    },
+    "tabBarSize": {
+      "title": "Tab bar size",
+      "smaller": "Smaller",
+      "larger": "Larger",
+      "current": "Current: {x}%"
+    },
+    "plusMinusOrder": {
+      "title": "Swap + and − buttons"
     }
   }
 }

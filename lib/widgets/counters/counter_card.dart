@@ -1,5 +1,7 @@
+import 'package:farmer_counter/cubits/settings/settings_cubit.dart';
 import 'package:farmer_counter/widgets/round_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CounterCard extends StatelessWidget {
   final String name;
@@ -17,6 +19,10 @@ class CounterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final bool swapped = context.select<SettingsCubit, bool>((SettingsCubit cubit) => cubit.state.swapPlusMinus);
+    final RoundIcon minus = RoundIcon(icon: Icons.remove, onTap: onMinus);
+    final RoundIcon plus = RoundIcon(icon: Icons.add, onTap: onPlus);
+
     return Card(
       elevation: 1,
       margin: const EdgeInsets.symmetric(vertical: 6),
@@ -25,10 +31,7 @@ class CounterCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Row(
           children: <Widget>[
-            RoundIcon(
-              icon: Icons.remove,
-              onTap: onMinus,
-            ),
+            if (swapped) plus else minus,
             Expanded(
               child: Column(
                 spacing: 4,
@@ -52,10 +55,7 @@ class CounterCard extends StatelessWidget {
                 ],
               ),
             ),
-            RoundIcon(
-              icon: Icons.add,
-              onTap: onPlus,
-            ),
+            if (swapped) minus else plus,
           ],
         ),
       ),

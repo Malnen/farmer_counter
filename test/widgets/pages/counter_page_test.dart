@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:farmer_counter/cubits/settings/settings_cubit.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:farmer_counter/widgets/pages/counter_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../test_material_app.dart';
@@ -17,9 +19,12 @@ void main() {
     item = CounterItem.create(name: 'TestCounter');
     app = TestMaterialApp(
       home: Scaffold(
-        body: CounterPage(
-          item: item,
-          onDelete: (CounterItem item) => deletedItem = item,
+        body: BlocProvider<SettingsCubit>(
+          create: (BuildContext context) => SettingsCubit(),
+          child: CounterPage(
+            item: item,
+            onDelete: (CounterItem item) => deletedItem = item,
+          ),
         ),
       ),
     );

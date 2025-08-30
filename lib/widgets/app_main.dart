@@ -1,9 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:farmer_counter/cubits/settings/settings_cubit.dart';
 import 'package:farmer_counter/utils/drive_sync_host.dart';
 import 'package:farmer_counter/utils/drive_sync_service.dart';
+import 'package:farmer_counter/widgets/bottom_navigation_bar/scale_aware_bottom_bar.dart';
 import 'package:farmer_counter/widgets/pages/counters_page.dart';
 import 'package:farmer_counter/widgets/pages/settings_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 class AppMain extends StatefulWidget {
@@ -31,20 +34,20 @@ class _AppMainState extends State<AppMain> {
           supportedLocales: context.supportedLocales,
           localizationsDelegates: context.localizationDelegates,
           debugShowCheckedModeBanner: false,
-          home: Builder(
-            builder: (BuildContext context) => DefaultTabController(
-              length: 2,
-              child: DriveSyncHost(
-                child: Scaffold(
-                  body: TabBarView(
-                    children: <Widget>[
-                      const CountersPage(),
-                      SettingsPage(syncService: syncService),
-                    ],
-                  ),
-                  bottomNavigationBar: Container(
-                    color: Theme.of(context).colorScheme.outlineVariant,
-                    child: TabBar(
+          home: BlocProvider<SettingsCubit>(
+            create: (BuildContext context) => SettingsCubit(),
+            child: Builder(
+              builder: (BuildContext context) => DefaultTabController(
+                length: 2,
+                child: DriveSyncHost(
+                  child: Scaffold(
+                    body: TabBarView(
+                      children: <Widget>[
+                        const CountersPage(),
+                        SettingsPage(syncService: syncService),
+                      ],
+                    ),
+                    bottomNavigationBar: ScaleAwareBottomBar(
                       tabs: <Widget>[
                         Tab(icon: const Icon(Icons.add_circle_rounded), text: 'app_main.counters'.tr()),
                         Tab(icon: const Icon(Icons.settings), text: 'app_main.settings'.tr()),

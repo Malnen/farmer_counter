@@ -71,7 +71,7 @@ class CounterDetailsPage extends HookWidget {
                     IconButton(
                       icon: const Icon(Icons.edit, size: 18),
                       onPressed: () => _editCount(context, itemNotifier),
-                      tooltip: 'counter_details_page.actions.edit_count'.tr(),
+                      tooltip: 'counter_details_page.actions.edit'.tr(),
                     ),
                   ],
                 ),

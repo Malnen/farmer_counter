@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:farmer_counter/models/counter_item.dart';
+import 'package:farmer_counter/widgets/bottom_navigation_bar/scale_aware_bottom_bar.dart';
 import 'package:farmer_counter/widgets/pages/counter_details_page.dart';
 import 'package:farmer_counter/widgets/pages/counter_notes_page.dart';
 import 'package:farmer_counter/widgets/pages/counter_summary_page.dart';
@@ -49,7 +50,7 @@ class CounterPage extends HookWidget {
         ),
         bottomNavigationBar: Container(
           color: Theme.of(context).colorScheme.outlineVariant,
-          child: TabBar(
+          child: ScaleAwareBottomBar(
             tabs: <Widget>[
               Tab(icon: Icon(Icons.auto_graph_outlined), text: 'counter_page.summary_tab_title'.tr()),
               Tab(icon: Icon(Icons.event_note_outlined), text: 'counter_page.notes_tab_title'.tr()),

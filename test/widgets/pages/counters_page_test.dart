@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:farmer_counter/cubits/settings/settings_cubit.dart';
 import 'package:farmer_counter/widgets/counters/counter_card.dart';
 import 'package:farmer_counter/widgets/pages/counters_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../test_material_app.dart';
@@ -12,7 +14,10 @@ void main() {
   setUp(() {
     app = TestMaterialApp(
       home: Scaffold(
-        body: CountersPage(),
+        body: BlocProvider<SettingsCubit>(
+          create: (BuildContext context) => SettingsCubit(),
+          child: CountersPage(),
+        ),
       ),
     );
   });

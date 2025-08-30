@@ -105,10 +105,8 @@ class CounterCubit extends Cubit<CounterState> {
       return;
     }
 
-    final int raw = item.count + delta;
-    final int newCount = raw < 0 ? 0 : raw;
+    final int newCount = item.count + delta;
     final int actualDelta = newCount - item.count;
-
     if (actualDelta == 0) {
       return;
     }

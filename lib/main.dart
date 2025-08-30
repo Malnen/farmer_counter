@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-
 // ignore: implementation_imports
 import 'package:easy_logger/src/enums.dart';
 import 'package:farmer_counter/models/counter_change_item.dart';
@@ -12,6 +11,7 @@ import 'package:farmer_counter/utils/drive_sync_service.dart';
 import 'package:farmer_counter/widgets/app_main.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -22,6 +22,7 @@ Future<void> main() async {
   final Isar isar = await _registerCounterIsar();
   final String dbFilePath = '${isar.directory}/${isar.name}.isar';
   _registerDriveSyncService(isar, dbFilePath);
+  await _initHydratedStorage();
   runApp(AppMain());
 }
 
@@ -40,6 +41,12 @@ Future<Isar> _registerCounterIsar() async {
 
   GetIt.instance.registerSingleton<Isar>(isar);
   return isar;
+}
+
+Future<void> _initHydratedStorage() async {
+  final Directory storageDirectory = await getApplicationDocumentsDirectory();
+  final HydratedStorage storage = await HydratedStorage.build(storageDirectory: HydratedStorageDirectory(storageDirectory.path));
+  HydratedBloc.storage = storage;
 }
 
 DriveSyncService _registerDriveSyncService(Isar isar, String dbFilePath) {
