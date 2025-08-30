@@ -138,8 +138,8 @@
     }
   },
   "counter_card": {
-    "more_actions": "More actions",
-    "hide_actions": "Hide actions",
+    "more_actions": "More",
+    "hide_actions": "Hide",
     "actions": {
       "increase": "Increase amount",
       "decrease": "Decrease amount"

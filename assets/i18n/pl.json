@@ -138,8 +138,8 @@
     }
   },
   "counter_card": {
-    "more_actions": "Więcej akcji",
-    "hide_actions": "Ukryj akcje",
+    "more_actions": "Więcej",
+    "hide_actions": "Ukryj",
     "actions": {
       "increase": "Zwiększ wartość",
       "decrease": "Zmniejsz wartość"
