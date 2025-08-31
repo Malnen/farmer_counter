@@ -125,11 +125,26 @@ class CounterCubit extends Cubit<CounterState> {
     await _isar.writeTxn(() async {
       final int deltaRemoved = change.delta;
       await _isar.counterChangeItems.delete(changeId);
-      final List<CounterChangeItem> later =
-          await _isar.counterChangeItems.filter().counterGuidEqualTo(guid).atGreaterThan(change.at, include: false).sortByAt().findAll();
-      for (final CounterChangeItem change in later) {
-        final CounterChangeItem updated = change.copyWith(newValue: change.newValue - deltaRemoved);
-        await _isar.counterChangeItems.put(updated);
+      const int batchSize = 100;
+      int offset = 0;
+      while (true) {
+        final List<CounterChangeItem> later = await _isar.counterChangeItems
+            .filter()
+            .counterGuidEqualTo(guid)
+            .atGreaterThan(change.at, include: false)
+            .sortByAt()
+            .offset(offset)
+            .limit(batchSize)
+            .findAll();
+        if (later.isEmpty) {
+          break;
+        }
+
+        for (final CounterChangeItem change in later) {
+          final CounterChangeItem updated = change.copyWith(newValue: change.newValue - deltaRemoved);
+          await _isar.counterChangeItems.put(updated);
+        }
+        offset += later.length;
       }
 
       final CounterChangeItem? latest = await _isar.counterChangeItems.where().counterGuidEqualToAnyAt(guid).sortByAtDesc().findFirst();
