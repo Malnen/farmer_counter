@@ -5,8 +5,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class CounterCardActions extends HookWidget {
   final void Function(int delta)? onBulkAdjust;
+  final VoidCallback? onReverseLast;
 
-  const CounterCardActions({required this.onBulkAdjust, super.key});
+  const CounterCardActions({required this.onBulkAdjust, this.onReverseLast, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +51,16 @@ class CounterCardActions extends HookWidget {
                       expanded: expanded,
                       maxWidth: maxWidth,
                       context: context,
+                    ),
+                    _buildReverseButton(
+                      background: colorScheme.secondary,
+                      foreground: colorScheme.onSecondary,
+                      icon: Icons.undo,
+                      labelKey: 'counter_card.actions.reverse',
+                      expanded: expanded,
+                      maxWidth: maxWidth,
+                      context: context,
+                      onPressed: onReverseLast,
                     ),
                   ],
                 ),
@@ -98,7 +109,7 @@ class CounterCardActions extends HookWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
-      width: expanded.value ? maxWidth : 1,
+      width: expanded.value ? maxWidth : 0,
       height: 48,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -106,10 +117,59 @@ class CounterCardActions extends HookWidget {
           foregroundColor: foreground,
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          minimumSize: const Size(0, 48),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         onPressed: () => _showBulkDialog(increase: increase, context: context),
+        child: ClipRect(
+          child: OverflowBox(
+            alignment: Alignment.center,
+            minWidth: 0,
+            maxWidth: maxWidth,
+            minHeight: 48,
+            maxHeight: 48,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(icon),
+                const SizedBox(width: 8),
+                Text(
+                  labelKey.tr(),
+                  maxLines: 1,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildReverseButton({
+    required Color background,
+    required Color foreground,
+    required IconData icon,
+    required String labelKey,
+    required ValueNotifier<bool> expanded,
+    required double maxWidth,
+    required BuildContext context,
+    required VoidCallback? onPressed,
+  }) {
+    final bool hasOnPressed = onPressed != null;
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      width: expanded.value && hasOnPressed ? maxWidth : 0,
+      height: hasOnPressed ? 48 : 0,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: background,
+          foregroundColor: foreground,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        onPressed: onPressed,
         child: ClipRect(
           child: OverflowBox(
             alignment: Alignment.center,

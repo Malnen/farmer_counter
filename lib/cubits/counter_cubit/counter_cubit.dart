@@ -37,17 +37,7 @@ class CounterCubit extends Cubit<CounterState> {
     }
 
     CounterItem item = CounterItem.create(name: name);
-    await _isar.writeTxn(() async {
-      await _isar.counterItems.put(item);
-      await _isar.counterChangeItems.put(
-        CounterChangeItem.create(
-          counterGuid: item.guid,
-          delta: 0,
-          newValue: item.count,
-        ),
-      );
-    });
-
+    await _isar.writeTxn(() async => _isar.counterItems.put(item));
     item = (await _isar.counterItems.getByGuid(item.guid))!;
     emit(state.copyWith(items: <CounterItem>[...state.items, item]));
   }
@@ -94,11 +84,6 @@ class CounterCubit extends Cubit<CounterState> {
 
   Future<void> decrement(String guid) => applyDelta(guid: guid, delta: -1);
 
-  Future<void> _loadItems() async {
-    final List<CounterItem> items = await _isar.counterItems.where().findAll();
-    emit(state.copyWith(items: items, status: CounterStatus.loaded));
-  }
-
   Future<void> applyDelta({required String guid, required int delta}) async {
     final CounterItem? item = await _isar.counterItems.filter().guidEqualTo(guid).findFirst();
     if (item == null) {
@@ -129,5 +114,44 @@ class CounterCubit extends Cubit<CounterState> {
         items: state.items.map((CounterItem item) => item.guid == guid ? updated : item).toList(),
       ),
     );
+  }
+
+  Future<void> deleteHistoryEntry(String guid, int changeId) async {
+    final CounterChangeItem? change = await _isar.counterChangeItems.get(changeId);
+    if (change == null || change.counterGuid != guid) {
+      return;
+    }
+
+    await _isar.writeTxn(() async {
+      final int deltaRemoved = change.delta;
+      await _isar.counterChangeItems.delete(changeId);
+      final List<CounterChangeItem> later =
+          await _isar.counterChangeItems.filter().counterGuidEqualTo(guid).atGreaterThan(change.at, include: false).sortByAt().findAll();
+      for (final CounterChangeItem change in later) {
+        final CounterChangeItem updated = change.copyWith(newValue: change.newValue - deltaRemoved);
+        await _isar.counterChangeItems.put(updated);
+      }
+
+      final CounterChangeItem? latest = await _isar.counterChangeItems.where().counterGuidEqualToAnyAt(guid).sortByAtDesc().findFirst();
+      final CounterItem? item = await _isar.counterItems.filter().guidEqualTo(guid).findFirst();
+      if (item != null) {
+        final int restored = latest?.newValue ?? 0;
+        final CounterItem updated = item.copyWith(count: restored);
+        await _isar.counterItems.put(updated);
+        emit(
+          state.copyWith(
+            items: state.items.map((CounterItem item) => item.guid == guid ? updated : item).toList(),
+          ),
+        );
+      }
+    });
+  }
+
+  Future<CounterChangeItem?> getLatestChange(String guid) async =>
+      _isar.counterChangeItems.where().counterGuidEqualToAnyAt(guid).sortByAtDesc().findFirst();
+
+  Future<void> _loadItems() async {
+    final List<CounterItem> items = await _isar.counterItems.where().findAll();
+    emit(state.copyWith(items: items, status: CounterStatus.loaded));
   }
 }

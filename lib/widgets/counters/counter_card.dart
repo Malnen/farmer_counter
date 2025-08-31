@@ -11,6 +11,7 @@ class CounterCard extends HookWidget {
   final VoidCallback onMinus;
   final VoidCallback onPlus;
   final void Function(int delta)? onBulkAdjust;
+  final VoidCallback? onReverseLast;
 
   const CounterCard({
     required this.name,
@@ -18,6 +19,7 @@ class CounterCard extends HookWidget {
     required this.onMinus,
     required this.onPlus,
     this.onBulkAdjust,
+    this.onReverseLast,
   });
 
   @override
@@ -70,7 +72,10 @@ class CounterCard extends HookWidget {
               ],
             ),
           ),
-          CounterCardActions(onBulkAdjust: onBulkAdjust),
+          CounterCardActions(
+            onBulkAdjust: onBulkAdjust,
+            onReverseLast: onReverseLast,
+          ),
         ],
       ),
     );

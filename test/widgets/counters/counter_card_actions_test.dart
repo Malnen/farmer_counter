@@ -169,4 +169,31 @@ void main() {
       verifyNever(() => onBulkAdjust.call(any()));
     });
   });
+
+  testWidgets('should call reverse callback when pressed', (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      // given:
+      final MockFunction mockReverse = MockFunction();
+      app = TestMaterialApp(
+        home: Scaffold(
+          body: CounterCardActions(
+            onBulkAdjust: onBulkAdjust.call,
+            onReverseLast: mockReverse.call,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.expand_more));
+      await tester.pumpAndSettle();
+
+      // when:
+      await tester.tap(find.byIcon(Icons.undo));
+      await tester.pumpAndSettle();
+
+      // then:
+      verify(mockReverse.call).called(1);
+    });
+  });
 }

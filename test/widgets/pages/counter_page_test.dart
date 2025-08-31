@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:farmer_counter/cubits/counter_cubit/counter_cubit.dart';
 import 'package:farmer_counter/cubits/settings/settings_cubit.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:farmer_counter/widgets/pages/counter_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nested/nested.dart';
 
 import '../../test_material_app.dart';
 
@@ -19,8 +21,11 @@ void main() {
     item = CounterItem.create(name: 'TestCounter');
     app = TestMaterialApp(
       home: Scaffold(
-        body: BlocProvider<SettingsCubit>(
-          create: (BuildContext context) => SettingsCubit(),
+        body: MultiBlocProvider(
+          providers: <SingleChildWidget>[
+            BlocProvider<CounterCubit>(create: (BuildContext context) => CounterCubit()),
+            BlocProvider<SettingsCubit>(create: (BuildContext context) => SettingsCubit()),
+          ],
           child: CounterPage(
             item: item,
             onDelete: (CounterItem item) => deletedItem = item,

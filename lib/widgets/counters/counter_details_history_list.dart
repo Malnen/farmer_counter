@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:farmer_counter/models/counter_change_item.dart';
 import 'package:farmer_counter/models/counter_item.dart';
+import 'package:farmer_counter/utils/history_entry_delete_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -83,19 +84,32 @@ class CounterDetailsHistoryList extends HookWidget {
           }
 
           final CounterChangeItem change = history.value[index];
-          return ListTile(
-            leading: Icon(
-              change.delta >= 0 ? Icons.add : Icons.remove,
-              color: change.delta >= 0 ? Colors.green : Colors.red,
-            ),
-            title: Text(
-              '${'counter_details_page.history.value'.tr()}: ${change.newValue}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(
-              '${'counter_details_page.history.difference'.tr()}: ${change.delta >= 0 ? '+' : ''}${change.delta}\n'
-              '${'counter_details_page.history.date'.tr()}: ${DateFormat('yyyy-MM-dd HH:mm').format(change.at)}',
-            ),
+          return Column(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(
+                  change.delta >= 0 ? Icons.add : Icons.remove,
+                  color: change.delta >= 0 ? Colors.green : Colors.red,
+                ),
+                title: Text(
+                  '${'counter_details_page.history.value'.tr()}: ${change.newValue}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  '${'counter_details_page.history.difference'.tr()}: ${change.delta >= 0 ? '+' : ''}${change.delta}\n'
+                  '${'counter_details_page.history.date'.tr()}: ${DateFormat('yyyy-MM-dd HH:mm').format(change.at)}',
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.redAccent),
+                  onPressed: () async => HistoryEntryDeleteHandler.show(
+                    context,
+                    guid: item.value.guid,
+                    changeId: change.id,
+                  ),
+                ),
+              ),
+              const Divider(height: 1),
+            ],
           );
         },
       ),

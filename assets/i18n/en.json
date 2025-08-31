@@ -59,7 +59,10 @@
       "no_items": "No items",
       "value": "Value",
       "difference": "Difference",
-      "date": "Date"
+      "date": "Date",
+      "delete_title": "Delete history entry?",
+      "delete_message": "This action cannot be undone. The entry will be permanently removed.",
+      "delete_cta": "Delete"
     }
   },
   "common": {
@@ -142,7 +145,8 @@
     "hide_actions": "Hide",
     "actions": {
       "increase": "Increase amount",
-      "decrease": "Decrease amount"
+      "decrease": "Decrease amount",
+      "reverse": "Reverse last change"
     },
     "dialogs": {
       "increase_title": "Increase amount",

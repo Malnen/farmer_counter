@@ -1,4 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:farmer_counter/cubits/counter_cubit/counter_cubit.dart';
+import 'package:farmer_counter/cubits/counter_cubit/couter_state.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:farmer_counter/widgets/bottom_navigation_bar/scale_aware_bottom_bar.dart';
 import 'package:farmer_counter/widgets/pages/counter_details_page.dart';
@@ -6,6 +9,7 @@ import 'package:farmer_counter/widgets/pages/counter_notes_page.dart';
 import 'package:farmer_counter/widgets/pages/counter_summary_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooked_bloc/hooked_bloc.dart';
 import 'package:provider/provider.dart';
 
 class CounterPage extends HookWidget {
@@ -22,6 +26,13 @@ class CounterPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<CounterItem> itemNotifier = useState(item);
+    final CounterCubit counterCubit = context.read();
+    useBlocListener(counterCubit, (CounterCubit bloc, CounterState state, BuildContext context) {
+      final CounterItem? counterItem = state.items.firstWhereOrNull((CounterItem item) => item.guid == itemNotifier.value.guid);
+      if (counterItem != null) {
+        itemNotifier.value = counterItem;
+      }
+    });
 
     return DefaultTabController(
       length: 3,

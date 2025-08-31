@@ -59,7 +59,10 @@
       "no_items": "Brak pozycji",
       "value": "Wartość",
       "difference": "Różnica",
-      "date": "Data"
+      "date": "Data",
+      "delete_title": "Usunąć wpis historii?",
+      "delete_message": "Tego działania nie można cofnąć. Wpis zostanie trwale usunięty.",
+      "delete_cta": "Usuń"
     }
   },
   "common": {
@@ -142,7 +145,8 @@
     "hide_actions": "Ukryj",
     "actions": {
       "increase": "Zwiększ wartość",
-      "decrease": "Zmniejsz wartość"
+      "decrease": "Zmniejsz wartość",
+      "reverse": "Cofnij ostatnią zmianę"
     },
     "dialogs": {
       "increase_title": "Zwiększ wartość",

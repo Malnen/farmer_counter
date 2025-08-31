@@ -2,12 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:farmer_counter/cubits/counter_cubit/counter_cubit.dart';
 import 'package:farmer_counter/cubits/counter_cubit/couter_state.dart';
 import 'package:farmer_counter/cubits/settings/settings_cubit.dart';
+import 'package:farmer_counter/models/counter_change_item.dart';
 import 'package:farmer_counter/models/counter_item.dart';
+import 'package:farmer_counter/utils/history_entry_delete_handler.dart';
 import 'package:farmer_counter/widgets/counters/counter_card.dart';
 import 'package:farmer_counter/widgets/pages/counter_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:nested/nested.dart';
 
 class CountersPage extends HookWidget {
   const CountersPage({super.key});
@@ -46,40 +49,52 @@ class CountersPage extends HookWidget {
                     itemCount: items.length,
                     itemBuilder: (BuildContext context, int index) {
                       final CounterItem item = items[index];
-                      return InkWell(
-                        splashFactory: NoSplash.splashFactory,
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext modalContext) => BlocProvider<SettingsCubit>.value(
-                              value: context.read(),
-                              child: CounterPage(
-                                item: items[index],
-                                onUpdate: cubit.updateItem,
-                                onDelete: (CounterItem item) => cubit.removeItem(
-                                  item.guid,
-                                  afterDelete: () => ScaffoldMessenger.of(modalContext).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        tr('counter_details_page.snackbar.deleted', namedArgs: <String, String>{'name': item.name}),
-                                      ),
-                                      action: SnackBarAction(
-                                        label: tr('counter_details_page.snackbar.ok'),
-                                        onPressed: () {},
+                      return FutureBuilder<CounterChangeItem?>(
+                        future: cubit.getLatestChange(item.guid),
+                        builder: (BuildContext context, AsyncSnapshot<CounterChangeItem?> snapshot) {
+                          final CounterChangeItem? change = snapshot.data;
+                          return InkWell(
+                            splashFactory: NoSplash.splashFactory,
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext modalContext) => MultiBlocProvider(
+                                  providers: <SingleChildWidget>[
+                                    BlocProvider<CounterCubit>.value(value: cubit),
+                                    BlocProvider<SettingsCubit>.value(value: context.read()),
+                                  ],
+                                  child: CounterPage(
+                                    item: items[index],
+                                    onUpdate: cubit.updateItem,
+                                    onDelete: (CounterItem item) => cubit.removeItem(
+                                      item.guid,
+                                      afterDelete: () => ScaffoldMessenger.of(modalContext).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            tr('counter_details_page.snackbar.deleted', namedArgs: <String, String>{'name': item.name}),
+                                          ),
+                                          action: SnackBarAction(
+                                            label: tr('counter_details_page.snackbar.ok'),
+                                            onPressed: () {},
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                        child: CounterCard(
-                          name: item.name,
-                          count: item.count,
-                          onMinus: () => cubit.decrement(item.guid),
-                          onPlus: () => cubit.increment(item.guid),
-                          onBulkAdjust: (int delta) => cubit.applyDelta(guid: item.guid, delta: delta),
-                        ),
+                            child: CounterCard(
+                              name: item.name,
+                              count: item.count,
+                              onMinus: () => cubit.decrement(item.guid),
+                              onPlus: () => cubit.increment(item.guid),
+                              onBulkAdjust: (int delta) => cubit.applyDelta(guid: item.guid, delta: delta),
+                              onReverseLast: change != null
+                                  ? () => HistoryEntryDeleteHandler.show(context, guid: item.guid, changeId: change.id)
+                                  : null,
+                            ),
+                          );
+                        },
                       );
                     },
                   );

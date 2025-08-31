@@ -41,9 +41,7 @@ void main() {
       expect(cubit.state.items.first.name, 'Cows');
       final String guid = cubit.state.items.first.guid;
       final List<CounterChangeItem> currentHistory = await history(guid);
-      expect(currentHistory.length, 1);
-      expect(currentHistory.first.delta, 0);
-      expect(currentHistory.first.newValue, 0);
+      expect(currentHistory.length, 0);
     },
   );
 
@@ -58,11 +56,11 @@ void main() {
     },
     verify: (CounterCubit cubit) async {
       final String guid = cubit.state.items.first.guid;
-      final CounterItem updated = cubit.state.items.firstWhere((CounterItem e) => e.guid == guid);
+      final CounterItem updated = cubit.state.items.firstWhere((CounterItem item) => item.guid == guid);
       expect(updated.count, 1);
       final List<CounterChangeItem> currentHistory = await history(guid);
-      expect(currentHistory.length, 2);
-      expect(currentHistory.any((CounterChangeItem e) => e.delta == 1 && e.newValue == 1), isTrue);
+      expect(currentHistory.length, 1);
+      expect(currentHistory.any((CounterChangeItem change) => change.delta == 1 && change.newValue == 1), isTrue);
     },
   );
 
@@ -78,11 +76,11 @@ void main() {
     },
     verify: (CounterCubit cubit) async {
       final String guid = cubit.state.items.first.guid;
-      final CounterItem item = cubit.state.items.firstWhere((CounterItem e) => e.guid == guid);
+      final CounterItem item = cubit.state.items.firstWhere((CounterItem item) => item.guid == guid);
       expect(item.count, 0);
       final List<CounterChangeItem> currentHistory = await history(guid);
-      expect(currentHistory.length, 3);
-      expect(currentHistory.any((CounterChangeItem e) => e.delta == -1 && e.newValue == 0), isTrue);
+      expect(currentHistory.length, 2);
+      expect(currentHistory.any((CounterChangeItem change) => change.delta == -1 && change.newValue == 0), isTrue);
     },
   );
 
@@ -101,7 +99,7 @@ void main() {
       final CounterItem item = cubit.state.items.firstWhere((CounterItem item) => item.guid == guid);
       expect(item.count, -2);
       final List<CounterChangeItem> currentHistory = await history(guid);
-      expect(currentHistory.length, 3);
+      expect(currentHistory.length, 2);
     },
   );
 
@@ -121,8 +119,8 @@ void main() {
       expect(cubit.state.items, isEmpty);
       final List<CounterItem> all = await isar.counterItems.where().findAll();
       expect(all, isEmpty);
-      final List<CounterChangeItem> histLeft = await isar.counterChangeItems.where().findAll();
-      expect(histLeft, isEmpty);
+      final List<CounterChangeItem> historyLeft = await isar.counterChangeItems.where().findAll();
+      expect(historyLeft, isEmpty);
     },
   );
 
@@ -173,9 +171,8 @@ void main() {
       final List<CounterItem> all = await isar.counterItems.where().findAll();
       expect(all.length, 1);
       expect(all.first.name, 'Updated');
-      final List<CounterChangeItem> hist = await history(all.first.guid);
-      expect(hist.length, 1);
-      expect(hist.first.delta, 0);
+      final List<CounterChangeItem> currentHistory = await history(all.first.guid);
+      expect(currentHistory.length, 0);
     },
   );
 
@@ -196,9 +193,9 @@ void main() {
       final List<CounterItem> all = await isar.counterItems.where().findAll();
       expect(all.length, 1);
       expect(all.first.count, 10);
-      final List<CounterChangeItem> hist = await history(guid);
-      expect(hist.length, 2);
-      expect(hist.any((CounterChangeItem h) => h.delta == 10 && h.newValue == 10), isTrue);
+      final List<CounterChangeItem> currentHistory = await history(guid);
+      expect(currentHistory.length, 1);
+      expect(currentHistory.any((CounterChangeItem change) => change.delta == 10 && change.newValue == 10), isTrue);
     },
   );
 
@@ -217,11 +214,11 @@ void main() {
           counterCubit.state.items.firstWhere((CounterItem counterItem) => counterItem.guid == counterGuid);
       expect(updatedCounterItem.count, 5);
       final List<CounterChangeItem> counterChangeHistory = await isar.counterChangeItems.filter().counterGuidEqualTo(counterGuid).findAll();
-      expect(counterChangeHistory.length, 2);
+      expect(counterChangeHistory.length, 1);
       expect(
-          counterChangeHistory
-              .any((CounterChangeItem counterChangeItem) => counterChangeItem.delta == 5 && counterChangeItem.newValue == 5),
-          isTrue);
+        counterChangeHistory.any((CounterChangeItem counterChangeItem) => counterChangeItem.delta == 5 && counterChangeItem.newValue == 5),
+        isTrue,
+      );
     },
   );
 
@@ -239,9 +236,84 @@ void main() {
       final CounterItem counterItem = counterCubit.state.items.firstWhere((CounterItem item) => item.guid == counterGuid);
       expect(counterItem.count, 0);
       final List<CounterChangeItem> counterChangeHistory = await isar.counterChangeItems.filter().counterGuidEqualTo(counterGuid).findAll();
-      expect(counterChangeHistory.length, 1);
-      expect(counterChangeHistory.first.delta, 0);
-      expect(counterChangeHistory.first.newValue, 0);
+      expect(counterChangeHistory.length, 0);
+    },
+  );
+
+  blocTest<CounterCubit, CounterState>(
+    'deleteHistoryEntry removes latest change and updates counter value',
+    build: CounterCubit.new,
+    act: (CounterCubit cubit) async {
+      await cubit.addItem('Dogs');
+      final String guid = cubit.state.items.first.guid;
+      await cubit.increment(guid);
+      await cubit.increment(guid);
+      await pumpEventQueue();
+
+      final List<CounterChangeItem> before = await history(guid);
+      final int changeId = before.last.id;
+      await cubit.deleteHistoryEntry(guid, changeId);
+      await pumpEventQueue();
+    },
+    verify: (CounterCubit cubit) async {
+      final String guid = cubit.state.items.first.guid;
+      final CounterItem item = cubit.state.items.first;
+      expect(item.count, 1);
+      final List<CounterChangeItem> after = await history(guid);
+      expect(after.length, 1);
+      expect(after.single.newValue, 1);
+    },
+  );
+
+  blocTest<CounterCubit, CounterState>(
+    'deleteHistoryEntry with invalid changeId does nothing',
+    build: CounterCubit.new,
+    act: (CounterCubit cubit) async {
+      await cubit.addItem('Cats');
+      final String guid = cubit.state.items.first.guid;
+      await cubit.increment(guid);
+      await pumpEventQueue();
+
+      await cubit.deleteHistoryEntry(guid, 999999);
+      await pumpEventQueue();
+    },
+    verify: (CounterCubit cubit) async {
+      final String guid = cubit.state.items.first.guid;
+      final CounterItem item = cubit.state.items.first;
+      expect(item.count, 1);
+      final List<CounterChangeItem> changes = await history(guid);
+      expect(changes.length, 1);
+    },
+  );
+
+  blocTest<CounterCubit, CounterState>(
+    'getLatestChange returns most recent change',
+    build: CounterCubit.new,
+    act: (CounterCubit cubit) async {
+      await cubit.addItem('Parrots');
+      final String guid = cubit.state.items.first.guid;
+      await cubit.increment(guid);
+      await cubit.increment(guid);
+      await cubit.decrement(guid);
+      await pumpEventQueue();
+
+      final CounterChangeItem? latest = await cubit.getLatestChange(guid);
+      expect(latest, isNotNull);
+      expect(latest!.newValue, 1);
+    },
+    verify: (_) async {},
+  );
+
+  blocTest<CounterCubit, CounterState>(
+    'getLatestChange returns null if no history',
+    build: CounterCubit.new,
+    act: (CounterCubit cubit) async {
+      await cubit.addItem('NoHistory');
+    },
+    verify: (CounterCubit cubit) async {
+      final String guid = cubit.state.items.first.guid;
+      final CounterChangeItem? latest = await cubit.getLatestChange(guid);
+      expect(latest, isNull);
     },
   );
 }

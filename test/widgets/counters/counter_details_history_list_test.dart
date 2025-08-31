@@ -116,4 +116,32 @@ void main() {
       expect(tiles, findsNWidgets(2));
     });
   });
+
+  testWidgets('should show delete button and open dialog', (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      // given:
+      await isar.writeTxn(() async {
+        await isar.counterChangeItems.put(
+          CounterChangeItem.create(counterGuid: item.guid, delta: 2, newValue: 2),
+        );
+      });
+
+      // when:
+      await tester.pumpWidget(app);
+      await tester.pump();
+      await pumpEventQueue();
+      await tester.pumpAndSettle();
+      final Finder delete = find.byIcon(Icons.delete);
+      await tester.tap(delete);
+      await tester.pump();
+      await pumpEventQueue();
+      await tester.pumpAndSettle();
+
+      // then:
+      final Finder dialog = find.byType(AlertDialog);
+      expect(dialog, findsOneWidget);
+      final Finder title = find.text('counter_details_page.history.delete_title'.tr());
+      expect(title, findsOneWidget);
+    });
+  });
 }
