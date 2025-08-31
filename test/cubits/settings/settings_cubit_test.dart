@@ -37,10 +37,11 @@ void main() {
     // when:
     // then:
     expect(
-        cubit.state,
-        SettingsState(
-          summaryMetricsState: defaultMetrics,
-        ));
+      cubit.state,
+      SettingsState(
+        summaryMetricsState: defaultMetrics,
+      ),
+    );
     expect(cubit.state.summaryMetricsState.length, SummaryMetric.values.length);
     for (final SummaryMetric metric in SummaryMetric.values) {
       final bool enabled = cubit.isSummaryMetricEnabled(metric);
@@ -57,7 +58,7 @@ void main() {
         tabBarScale: 1.45,
         swapPlusMinus: false,
         summaryMetricsState: defaultMetrics,
-      )
+      ),
     ],
   );
 
@@ -70,7 +71,7 @@ void main() {
         tabBarScale: 1.25,
         swapPlusMinus: true,
         summaryMetricsState: defaultMetrics,
-      )
+      ),
     ],
   );
   blocTest<SettingsCubit, SettingsState>(
@@ -120,7 +121,7 @@ void main() {
       'swapPlusMinus': true,
       'summaryMetricsState': <String, bool>{
         SummaryMetric.start.name: true,
-      }
+      },
     };
 
     // when:

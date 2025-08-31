@@ -11,22 +11,30 @@ class SummaryMetricsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<SettingsCubit, SettingsState, int>(
-      selector: (SettingsState state) =>
-          state.summaryMetricsState.entries.where((MapEntry<SummaryMetric, bool> entry) => entry.value).length,
-      builder: (BuildContext context, int enabledCount) => Card(
-        child: ListTile(
-          title: Text('settings.summary_metrics.title'.tr()),
-          subtitle: Text(
-            'settings.summary_metrics.subtitle'.tr(namedArgs: <String, String>{'count': '$enabledCount'}),
+    final SettingsCubit settingsCubit = context.watch<SettingsCubit>();
+    final SettingsState state = settingsCubit.state;
+    final int enabledCount = state.summaryMetricsState.entries.where((MapEntry<SummaryMetric, bool> entry) => entry.value).length;
+
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        title: Text('settings.summary_metrics.title'.tr()),
+        subtitle: Text(
+          'settings.summary_metrics.subtitle'.tr(
+            namedArgs: <String, String>{'count': '$enabledCount'},
           ),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => BlocProvider<SettingsCubit>.value(
-                value: context.read(),
-                child: const SummaryMetricsPage(),
-              ),
+        ),
+        trailing: const Icon(Icons.chevron_right),
+        splashColor: Colors.transparent,
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => BlocProvider<SettingsCubit>.value(
+              value: settingsCubit,
+              child: const SummaryMetricsPage(),
             ),
           ),
         ),

@@ -51,7 +51,7 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
     settingsCubit = context.read();
 
     useEffect(
-          () {
+      () {
         final DateTimeRange<DateTime> range = selectedDateRange.toRange();
         loadCounterSummary(range.start, range.end);
         return null;
@@ -113,7 +113,7 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
                           value: displayValue,
                         );
                       }).toList(),
-                    )
+                    ),
                 ],
               ),
             ),
@@ -219,7 +219,7 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
       firstDate: DateTime(now.year - 5),
       lastDate: DateTime(now.year + 5),
       initialDateRange:
-      startDate.value != null && endDate.value != null ? DateTimeRange(start: startDate.value!, end: endDate.value!) : null,
+          startDate.value != null && endDate.value != null ? DateTimeRange(start: startDate.value!, end: endDate.value!) : null,
     );
     if (picked != null) {
       selectedDateRange = DateRangeSelection.fromPreset(
@@ -243,7 +243,7 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
     required DateTime end,
   }) async {
     final List<CounterChangeItem> changes =
-    await isar.counterChangeItems.filter().counterGuidEqualTo(counter.guid).and().atBetween(start, end).findAll();
+        await isar.counterChangeItems.filter().counterGuidEqualTo(counter.guid).and().atBetween(start, end).findAll();
 
     if (changes.isEmpty) {
       return CounterSummary(
