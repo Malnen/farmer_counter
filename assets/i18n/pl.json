@@ -98,7 +98,14 @@
     "end": "Wartość końcowa",
     "added": "Dodane w okresie",
     "removed": "Odjęte w okresie",
-    "current": "Stan bieżący"
+    "current": "Stan bieżący",
+    "difference": "Różnica",
+    "percentChange": "Zmiana procentowa",
+    "averagePerDay": "Średnia dzienna",
+    "averagePerDayAdded": "Średnio dodanych dziennie",
+    "averagePerDayRemoved": "Średnio usuniętych dziennie",
+    "maxValue": "Maksymalna wartość",
+    "minValue": "Minimalna wartość"
   },
   "counter_summary_graph": {
     "no_data": "Brak danych"
@@ -138,6 +145,23 @@
     },
     "plusMinusOrder": {
       "title": "Zamień przyciski + i −"
+    },
+    "summary_metrics": {
+      "title": "Podsumowanie — metryki",
+      "subtitle": "{count} włączone",
+      "descriptions": {
+        "start": "Wartość na początku wybranego zakresu",
+        "end": "Wartość na końcu wybranego zakresu",
+        "added": "Łączna liczba dodanych elementów w wybranym zakresie",
+        "removed": "Łączna liczba usuniętych elementów w wybranym zakresie",
+        "difference": "Różnica między wartością początkową a końcową",
+        "percentChange": "Zmiana w stosunku do wartości początkowej",
+        "averagePerDay": "Średnia zmiana na dzień w wybranym zakresie",
+        "averagePerDayAdded": "Średnia liczba elementów dodanych dziennie w wybranym zakresie",
+        "averagePerDayRemoved": "Średnia liczba elementów usuniętych dziennie w wybranym zakresie",
+        "maxValue": "Najwyższa wartość osiągnięta w zakresie",
+        "minValue": "Najniższa wartość osiągnięta w zakresie"
+      }
     }
   },
   "counter_card": {

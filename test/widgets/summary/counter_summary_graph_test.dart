@@ -1,4 +1,4 @@
-import 'package:farmer_counter/cubits/enums/date_range_preset.dart';
+import 'package:farmer_counter/enums/date_range_preset.dart';
 import 'package:farmer_counter/models/counter_change_item.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:farmer_counter/models/date_range_selection.dart';

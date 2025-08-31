@@ -1,4 +1,4 @@
-import 'package:farmer_counter/cubits/enums/date_range_preset.dart';
+import 'package:farmer_counter/enums/date_range_preset.dart';
 import 'package:flutter/material.dart';
 
 class DateRangeSelection {

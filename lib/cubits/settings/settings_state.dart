@@ -1,3 +1,4 @@
+import 'package:farmer_counter/enums/summary_metric.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part '../../generated/cubits/settings/settings_state.freezed.dart';
@@ -14,10 +15,13 @@ class SettingsState with _$SettingsState {
   final double tabBarScale;
   @override
   final bool swapPlusMinus;
+  @override
+  final Map<SummaryMetric, bool> summaryMetricsState;
 
   const SettingsState({
     this.tabBarScale = 1.25,
     this.swapPlusMinus = false,
+    this.summaryMetricsState = const <SummaryMetric, bool>{},
   });
 
   factory SettingsState.fromJson(Map<String, Object?> json) => _$SettingsStateFromJson(json);

@@ -5,6 +5,7 @@ import 'package:farmer_counter/widgets/google_drive/google_drive_connected_card.
 import 'package:farmer_counter/widgets/google_drive/google_drive_disconnected_card.dart';
 import 'package:farmer_counter/widgets/pages/settings_page.dart';
 import 'package:farmer_counter/widgets/settings/plus_minus_order_card.dart';
+import 'package:farmer_counter/widgets/settings/summary_metric_card.dart';
 import 'package:farmer_counter/widgets/settings/tab_bar_size_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,13 +26,15 @@ void main() {
       home: Scaffold(
         body: BlocProvider<SettingsCubit>(
           create: (BuildContext context) => SettingsCubit(),
-          child: SettingsPage(syncService: syncService),
+          child: SingleChildScrollView(
+            child: SettingsPage(syncService: syncService),
+          ),
         ),
       ),
     );
   });
 
-  testWidgets('renders PlusMinusOrderCard and TabBarSizeCard', (WidgetTester tester) async {
+  testWidgets('renders always present widgets', (WidgetTester tester) async {
     await tester.runAsync(() async {
       // given:
       // when:
@@ -41,6 +44,8 @@ void main() {
       await tester.pumpAndSettle();
 
       // then:
+      final Finder summaryMetrics = find.byType(SummaryMetricsCard);
+      expect(summaryMetrics, findsOneWidget);
       final Finder plusMinus = find.byType(PlusMinusOrderCard);
       expect(plusMinus, findsOneWidget);
       final Finder tabBarSize = find.byType(TabBarSizeCard);

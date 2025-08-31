@@ -98,7 +98,14 @@
     "end": "End Value",
     "added": "Added in Range",
     "removed": "Removed in Range",
-    "current": "Current Total"
+    "current": "Current Total",
+    "difference": "Difference",
+    "percentChange": "Percent Change",
+    "averagePerDay": "Average per Day",
+    "averagePerDayAdded": "Average added per day",
+    "averagePerDayRemoved": "Average removed per day",
+    "maxValue": "Maximum Value",
+    "minValue": "Minimum Value"
   },
   "counter_summary_graph": {
     "no_data": "No data"
@@ -138,6 +145,23 @@
     },
     "plusMinusOrder": {
       "title": "Swap + and − buttons"
+    },
+    "summary_metrics": {
+      "title": "Summary metrics",
+      "subtitle": "{count} enabled",
+      "descriptions": {
+        "start": "Value at the beginning of the selected range",
+        "end": "Value at the end of the selected range",
+        "added": "Total amount added during the selected range",
+        "removed": "Total amount removed during the selected range",
+        "difference": "Overall difference between start and end values",
+        "percentChange": "Relative change compared to the start value",
+        "averagePerDay": "Average change per day in the selected range",
+        "averagePerDayAdded": "Average number of items added per day in the selected range",
+        "averagePerDayRemoved": "Average number of items removed per day in the selected range",
+        "maxValue": "Highest value reached in the selected range",
+        "minValue": "Lowest value reached in the selected range"
+      }
     }
   },
   "counter_card": {

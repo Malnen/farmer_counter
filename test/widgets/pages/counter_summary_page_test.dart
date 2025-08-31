@@ -1,8 +1,10 @@
+import 'package:farmer_counter/cubits/settings/settings_cubit.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:farmer_counter/widgets/pages/counter_summary_page.dart';
 import 'package:farmer_counter/widgets/summary/counter_summary_card.dart';
 import 'package:farmer_counter/widgets/summary/counter_summary_graph.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
@@ -14,9 +16,12 @@ void main() {
   setUp(() {
     app = TestMaterialApp(
       home: Scaffold(
-        body: ChangeNotifierProvider<ValueNotifier<CounterItem>>(
-          create: (BuildContext context) => ValueNotifier<CounterItem>(CounterItem.create(name: 'Test')),
-          child: CounterSummaryPage(),
+        body: BlocProvider<SettingsCubit>(
+          create: (BuildContext context) => SettingsCubit(),
+          child: ChangeNotifierProvider<ValueNotifier<CounterItem>>(
+            create: (BuildContext context) => ValueNotifier<CounterItem>(CounterItem.create(name: 'Test')),
+            child: CounterSummaryPage(),
+          ),
         ),
       ),
     );

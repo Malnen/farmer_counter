@@ -16,6 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$SettingsState {
   double get tabBarScale;
   bool get swapPlusMinus;
+  Map<SummaryMetric, bool> get summaryMetricsState;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.
@@ -33,16 +34,19 @@ mixin _$SettingsState {
             (identical(other.tabBarScale, tabBarScale) ||
                 other.tabBarScale == tabBarScale) &&
             (identical(other.swapPlusMinus, swapPlusMinus) ||
-                other.swapPlusMinus == swapPlusMinus));
+                other.swapPlusMinus == swapPlusMinus) &&
+            const DeepCollectionEquality()
+                .equals(other.summaryMetricsState, summaryMetricsState));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, tabBarScale, swapPlusMinus);
+  int get hashCode => Object.hash(runtimeType, tabBarScale, swapPlusMinus,
+      const DeepCollectionEquality().hash(summaryMetricsState));
 
   @override
   String toString() {
-    return 'SettingsState(tabBarScale: $tabBarScale, swapPlusMinus: $swapPlusMinus)';
+    return 'SettingsState(tabBarScale: $tabBarScale, swapPlusMinus: $swapPlusMinus, summaryMetricsState: $summaryMetricsState)';
   }
 }
 
@@ -52,7 +56,10 @@ abstract mixin class $SettingsStateCopyWith<$Res> {
           SettingsState value, $Res Function(SettingsState) _then) =
       _$SettingsStateCopyWithImpl;
   @useResult
-  $Res call({double tabBarScale, bool swapPlusMinus});
+  $Res call(
+      {double tabBarScale,
+      bool swapPlusMinus,
+      Map<SummaryMetric, bool> summaryMetricsState});
 }
 
 /// @nodoc
@@ -70,6 +77,7 @@ class _$SettingsStateCopyWithImpl<$Res>
   $Res call({
     Object? tabBarScale = null,
     Object? swapPlusMinus = null,
+    Object? summaryMetricsState = null,
   }) {
     return _then(SettingsState(
       tabBarScale: null == tabBarScale
@@ -80,6 +88,10 @@ class _$SettingsStateCopyWithImpl<$Res>
           ? _self.swapPlusMinus
           : swapPlusMinus // ignore: cast_nullable_to_non_nullable
               as bool,
+      summaryMetricsState: null == summaryMetricsState
+          ? _self.summaryMetricsState
+          : summaryMetricsState // ignore: cast_nullable_to_non_nullable
+              as Map<SummaryMetric, bool>,
     ));
   }
 }
