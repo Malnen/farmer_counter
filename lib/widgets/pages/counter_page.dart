@@ -36,37 +36,40 @@ class CounterPage extends HookWidget {
 
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(itemNotifier.value.name),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () => _deleteItem(context, itemNotifier),
-            ),
-          ],
-        ),
-        body: ChangeNotifierProvider<ValueNotifier<CounterItem>>.value(
-          value: itemNotifier,
-          child: TabBarView(
-            children: <Widget>[
-              CounterSummaryPage(),
-              CounterNotesPage(),
-              CounterDetailsPage(
-                onUpdate: onUpdate,
-                onDelete: onDelete,
+      child: SafeArea(
+        top: false,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(itemNotifier.value.name),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () => _deleteItem(context, itemNotifier),
               ),
             ],
           ),
-        ),
-        bottomNavigationBar: Container(
-          color: Theme.of(context).colorScheme.outlineVariant,
-          child: ScaleAwareBottomBar(
-            tabs: <Widget>[
-              Tab(icon: Icon(Icons.auto_graph_outlined), text: 'counter_page.summary_tab_title'.tr()),
-              Tab(icon: Icon(Icons.event_note_outlined), text: 'counter_page.notes_tab_title'.tr()),
-              Tab(icon: Icon(Icons.info), text: 'counter_page.details_tab_title'.tr()),
-            ],
+          body: ChangeNotifierProvider<ValueNotifier<CounterItem>>.value(
+            value: itemNotifier,
+            child: TabBarView(
+              children: <Widget>[
+                CounterSummaryPage(),
+                CounterNotesPage(),
+                CounterDetailsPage(
+                  onUpdate: onUpdate,
+                  onDelete: onDelete,
+                ),
+              ],
+            ),
+          ),
+          bottomNavigationBar: Container(
+            color: Theme.of(context).colorScheme.outlineVariant,
+            child: ScaleAwareBottomBar(
+              tabs: <Widget>[
+                Tab(icon: Icon(Icons.auto_graph_outlined), text: 'counter_page.summary_tab_title'.tr()),
+                Tab(icon: Icon(Icons.event_note_outlined), text: 'counter_page.notes_tab_title'.tr()),
+                Tab(icon: Icon(Icons.info), text: 'counter_page.details_tab_title'.tr()),
+              ],
+            ),
           ),
         ),
       ),

@@ -40,18 +40,21 @@ class _AppMainState extends State<AppMain> {
               builder: (BuildContext context) => DefaultTabController(
                 length: 2,
                 child: DriveSyncHost(
-                  child: Scaffold(
-                    body: TabBarView(
-                      children: <Widget>[
-                        const CountersPage(),
-                        SettingsPage(syncService: syncService),
-                      ],
-                    ),
-                    bottomNavigationBar: ScaleAwareBottomBar(
-                      tabs: <Widget>[
-                        Tab(icon: const Icon(Icons.add_circle_rounded), text: 'app_main.counters'.tr()),
-                        Tab(icon: const Icon(Icons.settings), text: 'app_main.settings'.tr()),
-                      ],
+                  child: SafeArea(
+                    top: false,
+                    child: Scaffold(
+                      body: TabBarView(
+                        children: <Widget>[
+                          const CountersPage(),
+                          SettingsPage(syncService: syncService),
+                        ],
+                      ),
+                      bottomNavigationBar: ScaleAwareBottomBar(
+                        tabs: <Widget>[
+                          Tab(icon: const Icon(Icons.add_circle_rounded), text: 'app_main.counters'.tr()),
+                          Tab(icon: const Icon(Icons.settings), text: 'app_main.settings'.tr()),
+                        ],
+                      ),
                     ),
                   ),
                 ),
