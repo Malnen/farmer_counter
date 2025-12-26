@@ -9,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late Widget app;
@@ -34,10 +35,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder page = find.byType(CounterSummaryPage);
+      await tester.waitForFinder(page);
       expect(page, findsOneWidget);
       final Finder card = find.byType(CounterSummaryCard);
       expect(card, findsOneWidget);

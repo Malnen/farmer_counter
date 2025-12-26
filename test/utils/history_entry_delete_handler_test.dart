@@ -10,6 +10,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:provider/single_child_widget.dart';
 
 import '../test_material_app.dart';
+import '../tester_extension.dart';
 import '../when_extension.dart';
 
 class _MockCounterCubit extends Mock implements CounterCubit {}
@@ -50,15 +51,15 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // when:
       final Finder open = find.text('open');
+      await tester.waitForFinder(open);
       await tester.tap(open);
-      await tester.pumpAndSettle();
 
       // then:
       final Finder dialog = find.byType(AlertDialog);
+      await tester.waitForFinder(dialog);
       expect(dialog, findsOneWidget);
       final Finder title = find.text('counter_details_page.history.delete_title'.tr());
       expect(title, findsOneWidget);
@@ -73,13 +74,13 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder open = find.text('open');
+      await tester.waitForFinder(open);
       await tester.tap(open);
-      await tester.pumpAndSettle();
 
       // when:
       final Finder cancel = find.text('common.cancel'.tr());
+      await tester.waitForFinder(cancel);
       await tester.tap(cancel);
       await tester.pumpAndSettle();
 
@@ -94,13 +95,13 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder open = find.text('open');
+      await tester.waitForFinder(open);
       await tester.tap(open);
-      await tester.pumpAndSettle();
 
       // when:
       final Finder confirm = find.text('counter_details_page.history.delete_cta'.tr());
+      await tester.waitForFinder(confirm);
       await tester.tap(confirm);
       await tester.pumpAndSettle();
 

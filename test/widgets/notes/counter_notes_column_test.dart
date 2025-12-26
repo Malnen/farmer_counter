@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late List<CounterItemNote> notes;
@@ -40,10 +41,10 @@ void main() {
       // when:
       await tester.pumpWidget(app);
       await tester.pump();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder note1 = find.text('Note 1');
+      await tester.waitForFinder(note1);
       expect(note1, findsOneWidget);
       final Finder note2 = find.text('Note 2');
       expect(note2, findsOneWidget);

@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 import '../../when_extension.dart';
 
 void main() {
@@ -37,10 +38,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder icon = find.byIcon(Icons.cloud);
+      await tester.waitForFinder(icon);
       expect(icon, findsOneWidget);
       final Finder title = find.text('settings.drive.not_connected_title'.tr());
       expect(title, findsOneWidget);
@@ -59,9 +60,9 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       final Finder connect = find.text('settings.drive.connect'.tr());
+      await tester.waitForFinder(connect);
       await tester.tap(connect);
       await tester.pumpAndSettle();
 
@@ -83,9 +84,9 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       final Finder connect = find.text('settings.drive.connect'.tr());
+      await tester.waitForFinder(connect);
       await tester.tap(connect);
       await tester.pumpAndSettle();
 

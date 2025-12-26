@@ -19,8 +19,10 @@ class CounterSummaryPage extends HookWidget {
             onPresetChange: (DateRangeSelection newSelection) => selection.value = newSelection,
           ),
           SizedBox(
-            height: 300,
-            child: CounterSummaryGraph(selection: selection.value),
+            height: 330,
+            child: CounterSummaryGraph(
+              selection: selection.value,
+            ),
           ),
         ],
       ),

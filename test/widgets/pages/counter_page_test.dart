@@ -9,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/single_child_widget.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late Widget app;
@@ -42,10 +43,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder counterPage = find.byType(CounterPage);
+      await tester.waitForFinder(counterPage);
       expect(counterPage, findsOneWidget);
       final Finder appbarTitle = find.descendant(of: find.byType(AppBar), matching: find.text(item.name));
       expect(appbarTitle, findsOneWidget);
@@ -59,11 +60,11 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder deleteIcon = find.byIcon(Icons.delete);
+      await tester.waitForFinder(deleteIcon);
       await tester.tap(deleteIcon);
-      await tester.pumpAndSettle();
       final Finder delete = find.text('counter_details_page.dialogs.delete_counter.delete'.tr());
+      await tester.waitForFinder(delete);
       await tester.tap(delete);
       await tester.pumpAndSettle();
 
@@ -80,11 +81,11 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder deleteIcon = find.byIcon(Icons.delete);
+      await tester.waitForFinder(deleteIcon);
       await tester.tap(deleteIcon);
-      await tester.pumpAndSettle();
       final Finder cancel = find.text('counter_details_page.dialogs.delete_counter.cancel'.tr());
+      await tester.waitForFinder(cancel);
       await tester.tap(cancel);
       await tester.pumpAndSettle();
 

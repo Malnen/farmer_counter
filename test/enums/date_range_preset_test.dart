@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  DateTime endOfDay(DateTime date) => DateTime(date.year, date.month, date.day, 23, 59, 59, 999);
+
   test('today preset should return range from start of today until now', () {
     // given:
     final DateTime before = DateTime.now();
@@ -14,8 +16,8 @@ void main() {
     // then:
     final DateTime expectedStart = DateTime(before.year, before.month, before.day);
     expect(range.start, expectedStart);
-    expect(range.end.isAfter(before) || range.end.isAtSameMomentAs(before), isTrue);
-    expect(range.end.isBefore(after) || range.end.isAtSameMomentAs(after), isTrue);
+    expect(range.end, endOfDay(before));
+    expect(range.end.isAfter(after), isTrue);
   });
 
   test('threeMonths preset should return last 90 days until now', () {
@@ -26,7 +28,7 @@ void main() {
     final DateTimeRange range = DateRangePreset.threeMonths.getPresetRange();
 
     // then:
-    expect(range.end.difference(now).inSeconds.abs() < 2, isTrue);
+    expect(range.end, endOfDay(now));
     expect(now.difference(range.start).inDays, closeTo(90, 1));
   });
 
@@ -38,7 +40,7 @@ void main() {
     final DateTimeRange range = DateRangePreset.sixMonths.getPresetRange();
 
     // then:
-    expect(range.end.difference(now).inSeconds.abs() < 2, isTrue);
+    expect(range.end, endOfDay(now));
     expect(now.difference(range.start).inDays, closeTo(180, 1));
   });
 
@@ -50,7 +52,7 @@ void main() {
     final DateTimeRange range = DateRangePreset.thisWeek.getPresetRange();
 
     // then:
-    expect(range.end.difference(now).inSeconds.abs() < 2, isTrue);
+    expect(range.end, endOfDay(now));
     expect(now.difference(range.start).inDays, closeTo(7, 1));
   });
 
@@ -62,7 +64,7 @@ void main() {
     final DateTimeRange range = DateRangePreset.thisMonth.getPresetRange();
 
     // then:
-    expect(range.end.difference(now).inSeconds.abs() < 2, isTrue);
+    expect(range.end, endOfDay(now));
     expect(now.difference(range.start).inDays, closeTo(30, 1));
   });
 
@@ -74,7 +76,7 @@ void main() {
     final DateTimeRange range = DateRangePreset.thisYear.getPresetRange();
 
     // then:
-    expect(range.end.difference(now).inSeconds.abs() < 2, isTrue);
+    expect(range.end, endOfDay(now));
     expect(now.difference(range.start).inDays, closeTo(365, 1));
   });
 

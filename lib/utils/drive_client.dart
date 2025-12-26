@@ -24,7 +24,8 @@ class DriveClient {
 
   bool get isConnected => authState.value == DriveAuthState.connected;
 
-  drive.DriveApi? get api => (_headers != null) ? drive.DriveApi(_AuthHttpClient(_headers!)) : null;
+  drive.DriveApi? get api =>
+      (_headers != null) ? drive.DriveApi(_AuthHttpClient(_headers!)) : null;
 
   Future<bool> connect() async {
     await _ensureInit();
@@ -32,7 +33,8 @@ class DriveClient {
       final GoogleSignInAccount account = await googleSignIn.authenticate(
         scopeHint: <String>[drive.DriveApi.driveFileScope],
       );
-      final Map<String, String>? headers = await account.authorizationClient.authorizationHeaders(
+      final Map<String, String>? headers = await account.authorizationClient
+          .authorizationHeaders(
         <String>[drive.DriveApi.driveFileScope],
         promptIfNecessary: true,
       );
@@ -48,7 +50,8 @@ class DriveClient {
       await prefs.setBool(_kAutoSignInKey, true);
 
       return true;
-    } catch (_) {
+    } catch (error) {
+      debugPrint('$error');
       return false;
     }
   }
@@ -88,7 +91,8 @@ class DriveClient {
 
   Future<void> _ensureInit() async {
     if (!_initialized) {
-      final SharedPreferences preferences = await SharedPreferences.getInstance();
+      final SharedPreferences preferences = await SharedPreferences
+          .getInstance();
       _autoSignInEnabled = preferences.getBool(_kAutoSignInKey) ?? false;
       await googleSignIn.initialize(
         clientId: '156428963186-onde9hov3jkpf2sjebkoumnvm218t4v9.apps.googleusercontent.com',

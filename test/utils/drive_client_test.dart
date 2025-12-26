@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../test_material_app.dart';
+import '../tester_extension.dart';
 import '../when_extension.dart';
 
 void main() {
@@ -41,10 +42,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder child = find.text('child');
+      await tester.waitForFinder(child);
       expect(child, findsOneWidget);
       verify(client.loadState).called(1);
       verify(syncService.init).called(1);
@@ -59,8 +60,8 @@ void main() {
 
       // when:
       syncService.hasConflict.value = true;
-      await tester.pumpAndSettle();
       final Finder localButton = find.text('drive_sync.conflict.keep_local'.tr());
+      await tester.waitForFinder(localButton);
       await tester.tap(localButton);
       await tester.pumpAndSettle();
 
@@ -77,8 +78,8 @@ void main() {
 
       // when:
       syncService.hasConflict.value = true;
-      await tester.pumpAndSettle();
       final Finder driveButton = find.text('drive_sync.conflict.keep_drive'.tr());
+      await tester.waitForFinder(driveButton);
       await tester.tap(driveButton);
       await tester.pumpAndSettle();
 
@@ -95,8 +96,8 @@ void main() {
 
       // when:
       syncService.hasConflict.value = true;
-      await tester.pumpAndSettle();
       final Finder bothButton = find.text('drive_sync.conflict.keep_both'.tr());
+      await tester.waitForFinder(bothButton);
       await tester.tap(bothButton);
       await tester.pumpAndSettle();
 
@@ -113,8 +114,8 @@ void main() {
 
       // when:
       syncService.hasConflict.value = true;
-      await tester.pumpAndSettle();
       final Finder dialog = find.byType(AlertDialog);
+      await tester.waitForFinder(dialog);
       Navigator.of(tester.element(dialog)).pop();
       await tester.pumpAndSettle();
 

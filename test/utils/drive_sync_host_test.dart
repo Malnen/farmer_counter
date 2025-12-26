@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../test_material_app.dart';
+import '../tester_extension.dart';
 import '../when_extension.dart';
 
 void main() {
@@ -41,10 +42,11 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
-      expect(find.text('child'), findsOneWidget);
+      final Finder child = find.text('child');
+      await tester.waitForFinder(child);
+      expect(child, findsOneWidget);
       verify(client.loadState).called(1);
       verify(syncService.init).called(1);
     });
@@ -58,8 +60,8 @@ void main() {
 
       // when:
       syncService.hasConflict.value = true;
-      await tester.pumpAndSettle();
       final Finder dialog = find.byType(AlertDialog);
+      await tester.waitForFinder(dialog);
       expect(dialog, findsOneWidget);
 
       final Finder localBtn = find.text('drive_sync.conflict.keep_local'.tr());
@@ -77,9 +79,9 @@ void main() {
       await tester.pumpAndSettle();
 
       syncService.hasConflict.value = true;
-      await tester.pumpAndSettle();
 
       final Finder driveBtn = find.text('drive_sync.conflict.keep_drive'.tr());
+      await tester.waitForFinder(driveBtn);
       await tester.tap(driveBtn);
       await tester.pumpAndSettle();
 
@@ -93,9 +95,9 @@ void main() {
       await tester.pumpAndSettle();
 
       syncService.hasConflict.value = true;
-      await tester.pumpAndSettle();
 
       final Finder bothBtn = find.text('drive_sync.conflict.keep_both'.tr());
+      await tester.waitForFinder(bothBtn);
       await tester.tap(bothBtn);
       await tester.pumpAndSettle();
 
@@ -109,10 +111,10 @@ void main() {
       await tester.pumpAndSettle();
 
       syncService.hasConflict.value = true;
-      await tester.pumpAndSettle();
 
-      // close dialog without pressing any option
-      Navigator.of(tester.element(find.byType(AlertDialog))).pop();
+      final Finder dialog = find.byType(AlertDialog);
+      await tester.waitForFinder(dialog);
+      Navigator.of(tester.element(dialog)).pop();
       await tester.pumpAndSettle();
 
       expect(syncService.hasConflict.value, isFalse);

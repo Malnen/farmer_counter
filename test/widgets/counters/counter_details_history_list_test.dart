@@ -9,6 +9,7 @@ import 'package:isar_community/isar.dart';
 import 'package:provider/provider.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late Widget app;
@@ -36,12 +37,13 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder historyList = find.byType(CounterDetailsHistoryList);
+      await tester.waitForFinder(historyList);
       expect(historyList, findsOneWidget);
       final Finder noItems = find.text('counter_details_page.history.no_items'.tr());
+      await tester.waitForFinder(noItems);
       expect(noItems, findsOneWidget);
     });
   });
@@ -62,12 +64,13 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder historyList = find.byType(CounterDetailsHistoryList);
+      await tester.waitForFinder(historyList);
       expect(historyList, findsOneWidget);
       final Finder tiles = find.byType(ListTile);
+      await tester.waitForFinderCount(tiles, 2);
       expect(tiles, findsNWidgets(2));
     });
   });
@@ -94,10 +97,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       Finder tiles = find.byType(ListTile);
+      await tester.waitForFinder(tiles);
       expect(tiles, findsOneWidget);
 
       // when:
@@ -109,10 +112,10 @@ void main() {
       notifier.value = notifier.value.copyWith(count: 8);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       tiles = find.byType(ListTile);
+      await tester.waitForFinder(tiles);
       expect(tiles, findsNWidgets(2));
     });
   });
@@ -130,15 +133,15 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder delete = find.byIcon(Icons.delete);
+      await tester.waitForFinder(delete);
       await tester.tap(delete);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder dialog = find.byType(AlertDialog);
+      await tester.waitForFinder(dialog);
       expect(dialog, findsOneWidget);
       final Finder title = find.text('counter_details_page.history.delete_title'.tr());
       expect(title, findsOneWidget);

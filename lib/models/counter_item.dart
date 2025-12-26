@@ -1,3 +1,4 @@
+import 'package:farmer_counter/enums/counter_chart_type.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:isar_community/isar.dart';
 import 'package:uuid/uuid.dart';
@@ -21,6 +22,9 @@ class CounterItem with _$CounterItem {
   final DateTime createdAt;
   @override
   final Id id;
+  @override
+  @enumerated
+  final CounterChartType lastSelectedChartType;
 
   const CounterItem({
     required this.guid,
@@ -28,6 +32,7 @@ class CounterItem with _$CounterItem {
     required this.count,
     required this.createdAt,
     required this.id,
+    this.lastSelectedChartType = CounterChartType.bar,
   });
 
   factory CounterItem.create({

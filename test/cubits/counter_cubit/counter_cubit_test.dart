@@ -185,6 +185,7 @@ void main() {
       final CounterItem updated = existing.copyWith(count: 10);
       await cubit.updateItem(updated);
       await pumpEventQueue();
+      await pumpEventQueue();
     },
     verify: (CounterCubit cubit) async {
       expect(cubit.state.items.length, 1);
@@ -293,7 +294,9 @@ void main() {
       await cubit.addItem('Parrots');
       final String guid = cubit.state.items.first.guid;
       await cubit.increment(guid);
+      await Future<void>.delayed(Duration(milliseconds: 10));
       await cubit.increment(guid);
+      await Future<void>.delayed(Duration(milliseconds: 10));
       await cubit.decrement(guid);
       await pumpEventQueue();
 

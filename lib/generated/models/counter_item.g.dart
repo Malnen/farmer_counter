@@ -39,8 +39,14 @@ const CounterItemSchema = CollectionSchema(
       name: r'hashCode',
       type: IsarType.long,
     ),
-    r'name': PropertySchema(
+    r'lastSelectedChartType': PropertySchema(
       id: 4,
+      name: r'lastSelectedChartType',
+      type: IsarType.byte,
+      enumMap: _CounterItemlastSelectedChartTypeEnumValueMap,
+    ),
+    r'name': PropertySchema(
+      id: 5,
       name: r'name',
       type: IsarType.string,
     )
@@ -94,7 +100,8 @@ void _counterItemSerialize(
   writer.writeDateTime(offsets[1], object.createdAt);
   writer.writeString(offsets[2], object.guid);
   writer.writeLong(offsets[3], object.hashCode);
-  writer.writeString(offsets[4], object.name);
+  writer.writeByte(offsets[4], object.lastSelectedChartType.index);
+  writer.writeString(offsets[5], object.name);
 }
 
 CounterItem _counterItemDeserialize(
@@ -108,7 +115,10 @@ CounterItem _counterItemDeserialize(
     createdAt: reader.readDateTime(offsets[1]),
     guid: reader.readString(offsets[2]),
     id: id,
-    name: reader.readString(offsets[4]),
+    lastSelectedChartType: _CounterItemlastSelectedChartTypeValueEnumMap[
+            reader.readByteOrNull(offsets[4])] ??
+        CounterChartType.bar,
+    name: reader.readString(offsets[5]),
   );
   return object;
 }
@@ -129,11 +139,24 @@ P _counterItemDeserializeProp<P>(
     case 3:
       return (reader.readLong(offset)) as P;
     case 4:
+      return (_CounterItemlastSelectedChartTypeValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          CounterChartType.bar) as P;
+    case 5:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _CounterItemlastSelectedChartTypeEnumValueMap = {
+  'bar': 0,
+  'line': 1,
+};
+const _CounterItemlastSelectedChartTypeValueEnumMap = {
+  0: CounterChartType.bar,
+  1: CounterChartType.line,
+};
 
 Id _counterItemGetId(CounterItem object) {
   return object.id;
@@ -675,6 +698,62 @@ extension CounterItemQueryFilter
     });
   }
 
+  QueryBuilder<CounterItem, CounterItem, QAfterFilterCondition>
+      lastSelectedChartTypeEqualTo(CounterChartType value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lastSelectedChartType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CounterItem, CounterItem, QAfterFilterCondition>
+      lastSelectedChartTypeGreaterThan(
+    CounterChartType value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lastSelectedChartType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CounterItem, CounterItem, QAfterFilterCondition>
+      lastSelectedChartTypeLessThan(
+    CounterChartType value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lastSelectedChartType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CounterItem, CounterItem, QAfterFilterCondition>
+      lastSelectedChartTypeBetween(
+    CounterChartType lower,
+    CounterChartType upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lastSelectedChartType',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<CounterItem, CounterItem, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -863,6 +942,20 @@ extension CounterItemQuerySortBy
     });
   }
 
+  QueryBuilder<CounterItem, CounterItem, QAfterSortBy>
+      sortByLastSelectedChartType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastSelectedChartType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<CounterItem, CounterItem, QAfterSortBy>
+      sortByLastSelectedChartTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastSelectedChartType', Sort.desc);
+    });
+  }
+
   QueryBuilder<CounterItem, CounterItem, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -938,6 +1031,20 @@ extension CounterItemQuerySortThenBy
     });
   }
 
+  QueryBuilder<CounterItem, CounterItem, QAfterSortBy>
+      thenByLastSelectedChartType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastSelectedChartType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<CounterItem, CounterItem, QAfterSortBy>
+      thenByLastSelectedChartTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastSelectedChartType', Sort.desc);
+    });
+  }
+
   QueryBuilder<CounterItem, CounterItem, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -975,6 +1082,13 @@ extension CounterItemQueryWhereDistinct
   QueryBuilder<CounterItem, CounterItem, QDistinct> distinctByHashCode() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'hashCode');
+    });
+  }
+
+  QueryBuilder<CounterItem, CounterItem, QDistinct>
+      distinctByLastSelectedChartType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lastSelectedChartType');
     });
   }
 
@@ -1018,6 +1132,13 @@ extension CounterItemQueryProperty
     });
   }
 
+  QueryBuilder<CounterItem, CounterChartType, QQueryOperations>
+      lastSelectedChartTypeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lastSelectedChartType');
+    });
+  }
+
   QueryBuilder<CounterItem, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
@@ -1035,6 +1156,9 @@ CounterItem _$CounterItemFromJson(Map<String, dynamic> json) => CounterItem(
       count: (json['count'] as num).toInt(),
       createdAt: DateTime.parse(json['createdAt'] as String),
       id: (json['id'] as num).toInt(),
+      lastSelectedChartType: $enumDecodeNullable(
+              _$CounterChartTypeEnumMap, json['lastSelectedChartType']) ??
+          CounterChartType.bar,
     );
 
 Map<String, dynamic> _$CounterItemToJson(CounterItem instance) =>
@@ -1044,4 +1168,11 @@ Map<String, dynamic> _$CounterItemToJson(CounterItem instance) =>
       'count': instance.count,
       'createdAt': instance.createdAt.toIso8601String(),
       'id': instance.id,
+      'lastSelectedChartType':
+          _$CounterChartTypeEnumMap[instance.lastSelectedChartType]!,
     };
+
+const _$CounterChartTypeEnumMap = {
+  CounterChartType.bar: 'bar',
+  CounterChartType.line: 'line',
+};

@@ -6,6 +6,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../common_mocks.dart';
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late Widget app;
@@ -27,13 +28,17 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
-      expect(find.byIcon(Icons.expand_more), findsOneWidget);
-      expect(find.byIcon(Icons.expand_less), findsNothing);
-      expect(find.byIcon(Icons.arrow_upward), findsOneWidget);
-      expect(find.byIcon(Icons.arrow_downward), findsOneWidget);
+      final Finder more = find.byIcon(Icons.expand_more);
+      await tester.waitForFinder(more);
+      expect(more, findsOneWidget);
+      final Finder less = find.byIcon(Icons.expand_less);
+      expect(less, findsNothing);
+      final Finder up = find.byIcon(Icons.arrow_upward);
+      expect(up, findsOneWidget);
+      final Finder down = find.byIcon(Icons.arrow_downward);
+      expect(down, findsOneWidget);
     });
   });
 
@@ -43,18 +48,22 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // when:
-      await tester.tap(find.byIcon(Icons.expand_more));
+      final Finder more = find.byIcon(Icons.expand_more);
+      await tester.waitForFinder(more);
+      await tester.tap(more);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
-      expect(find.byIcon(Icons.expand_less), findsOneWidget);
-      expect(find.byIcon(Icons.arrow_upward), findsOneWidget);
-      expect(find.byIcon(Icons.arrow_downward), findsOneWidget);
+      final Finder less = find.byIcon(Icons.expand_less);
+      await tester.waitForFinder(less);
+      expect(less, findsOneWidget);
+      final Finder up = find.byIcon(Icons.arrow_upward);
+      expect(up, findsOneWidget);
+      final Finder down = find.byIcon(Icons.arrow_downward);
+      expect(down, findsOneWidget);
     });
   });
 
@@ -64,19 +73,26 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.expand_more));
+      final Finder more = find.byIcon(Icons.expand_more);
+      await tester.waitForFinder(more);
+      await tester.tap(more);
       await tester.pump();
       await pumpEventQueue();
       await tester.pumpAndSettle();
 
       // when:
-      await tester.tap(find.byIcon(Icons.arrow_upward));
+      final Finder up = find.byIcon(Icons.arrow_upward);
+      await tester.waitForFinder(up);
+      await tester.tap(up);
       await tester.pump();
       await pumpEventQueue();
       await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextFormField), '5');
-      await tester.tap(find.text('common.save'.tr()));
+      final Finder textField = find.byType(TextFormField);
+      await tester.waitForFinder(textField);
+      await tester.enterText(textField, '5');
+      final Finder save = find.text('common.save'.tr());
+      await tester.waitForFinder(save);
+      await tester.tap(save);
       await tester.pump();
       await pumpEventQueue();
       await tester.pumpAndSettle();
@@ -92,19 +108,26 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.expand_more));
+      final Finder more = find.byIcon(Icons.expand_more);
+      await tester.waitForFinder(more);
+      await tester.tap(more);
       await tester.pump();
       await pumpEventQueue();
       await tester.pumpAndSettle();
 
       // when:
-      await tester.tap(find.byIcon(Icons.arrow_downward));
+      final Finder down = find.byIcon(Icons.arrow_downward);
+      await tester.waitForFinder(down);
+      await tester.tap(down);
       await tester.pump();
       await pumpEventQueue();
       await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextFormField), '3');
-      await tester.tap(find.text('common.save'.tr()));
+      final Finder textfield = find.byType(TextFormField);
+      await tester.waitForFinder(textfield);
+      await tester.enterText(textfield, '3');
+      final Finder save = find.text('common.save'.tr());
+      await tester.waitForFinder(save);
+      await tester.tap(save);
       await tester.pump();
       await pumpEventQueue();
       await tester.pumpAndSettle();
@@ -120,18 +143,23 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.expand_more));
+
+      final Finder more = find.byIcon(Icons.expand_more);
+      await tester.waitForFinder(more);
+      await tester.tap(more);
       await tester.pump();
       await pumpEventQueue();
       await tester.pumpAndSettle();
 
       // when:
-      await tester.tap(find.byIcon(Icons.arrow_upward));
+      final Finder up = find.byIcon(Icons.arrow_upward);
+      await tester.waitForFinder(up);
+      await tester.tap(up);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('common.cancel'.tr()));
+      final Finder cancel = find.text('common.cancel'.tr());
+      await tester.waitForFinder(cancel);
+      await tester.tap(cancel);
       await tester.pump();
       await pumpEventQueue();
       await tester.pumpAndSettle();
@@ -147,25 +175,33 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.expand_more));
+
+      final Finder more = find.byIcon(Icons.expand_more);
+      await tester.waitForFinder(more);
+      await tester.tap(more);
       await tester.pump();
       await pumpEventQueue();
       await tester.pumpAndSettle();
 
       // when:
-      await tester.tap(find.byIcon(Icons.arrow_upward));
+      final Finder up = find.byIcon(Icons.arrow_upward);
+      await tester.waitForFinder(up);
+      await tester.tap(up);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextFormField), '0');
-      await tester.tap(find.text('common.save'.tr()));
+      final Finder textfield = find.byType(TextFormField);
+      await tester.waitForFinder(textfield);
+      await tester.enterText(textfield, '0');
+      final Finder save = find.text('common.save'.tr());
+      await tester.waitForFinder(save);
+      await tester.tap(save);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
-      expect(find.text('counter_card.dialogs.amount_error'.tr()), findsOneWidget);
+      final Finder error = find.text('counter_card.dialogs.amount_error'.tr());
+      await tester.waitForFinder(error);
+      expect(error, findsOneWidget);
       verifyNever(() => onBulkAdjust.call(any()));
     });
   });
@@ -184,12 +220,15 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.expand_more));
+      final Finder more = find.byIcon(Icons.expand_more);
+      await tester.waitForFinder(more);
+      await tester.tap(more);
       await tester.pumpAndSettle();
 
       // when:
-      await tester.tap(find.byIcon(Icons.undo));
+      final Finder undo = find.byIcon(Icons.undo);
+      await tester.waitForFinder(undo);
+      await tester.tap(undo);
       await tester.pumpAndSettle();
 
       // then:

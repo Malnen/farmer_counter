@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late SettingsCubit cubit;
@@ -30,10 +31,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder title = find.text('settings.plusMinusOrder.title'.tr());
+      await tester.waitForFinder(title);
       expect(title, findsOneWidget);
       final Finder switchTile = find.byType(SwitchListTile);
       expect(switchTile, findsOneWidget);
@@ -44,10 +45,10 @@ void main() {
     await tester.runAsync(() async {
       // given:
       await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
 
       // when:
       final Finder switchFinder = find.byType(Switch);
+      await tester.waitForFinder(switchFinder);
       await tester.tap(switchFinder);
       await tester.pumpAndSettle();
 
@@ -61,10 +62,10 @@ void main() {
       // given:
       cubit.setSwapPlusMinus(true);
       await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
 
       // when:
       final Finder switchFinder = find.byType(Switch);
+      await tester.waitForFinder(switchFinder);
       await tester.tap(switchFinder);
       await tester.pumpAndSettle();
 

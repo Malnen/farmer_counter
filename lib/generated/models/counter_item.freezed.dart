@@ -19,6 +19,7 @@ mixin _$CounterItem {
   int get count;
   DateTime get createdAt;
   Id get id;
+  CounterChartType get lastSelectedChartType;
 
   /// Create a copy of CounterItem
   /// with the given fields replaced by the non-null parameter values.
@@ -37,17 +38,19 @@ mixin _$CounterItem {
             (identical(other.count, count) || other.count == count) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
-            (identical(other.id, id) || other.id == id));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.lastSelectedChartType, lastSelectedChartType) ||
+                other.lastSelectedChartType == lastSelectedChartType));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, guid, name, count, createdAt, id);
+  int get hashCode => Object.hash(
+      runtimeType, guid, name, count, createdAt, id, lastSelectedChartType);
 
   @override
   String toString() {
-    return 'CounterItem(guid: $guid, name: $name, count: $count, createdAt: $createdAt, id: $id)';
+    return 'CounterItem(guid: $guid, name: $name, count: $count, createdAt: $createdAt, id: $id, lastSelectedChartType: $lastSelectedChartType)';
   }
 }
 
@@ -57,7 +60,13 @@ abstract mixin class $CounterItemCopyWith<$Res> {
           CounterItem value, $Res Function(CounterItem) _then) =
       _$CounterItemCopyWithImpl;
   @useResult
-  $Res call({String guid, String name, int count, DateTime createdAt, int id});
+  $Res call(
+      {String guid,
+      String name,
+      int count,
+      DateTime createdAt,
+      int id,
+      CounterChartType lastSelectedChartType});
 }
 
 /// @nodoc
@@ -77,6 +86,7 @@ class _$CounterItemCopyWithImpl<$Res> implements $CounterItemCopyWith<$Res> {
     Object? count = null,
     Object? createdAt = null,
     Object? id = null,
+    Object? lastSelectedChartType = null,
   }) {
     return _then(CounterItem(
       guid: null == guid
@@ -99,6 +109,10 @@ class _$CounterItemCopyWithImpl<$Res> implements $CounterItemCopyWith<$Res> {
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      lastSelectedChartType: null == lastSelectedChartType
+          ? _self.lastSelectedChartType
+          : lastSelectedChartType // ignore: cast_nullable_to_non_nullable
+              as CounterChartType,
     ));
   }
 }

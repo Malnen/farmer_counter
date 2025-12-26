@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late SettingsCubit cubit;
@@ -32,10 +33,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder title = find.text('settings.summary_metrics.title'.tr());
+      await tester.waitForFinder(title);
       expect(title, findsOneWidget);
       final Finder subtitle = find.text(
         'settings.summary_metrics.subtitle'.tr(
@@ -55,7 +56,6 @@ void main() {
       cubit.setSummaryMetric(SummaryMetric.added, false);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder subtitle = find.text(
@@ -63,6 +63,7 @@ void main() {
           namedArgs: <String, String>{'count': '${SummaryMetric.values.length - 1}'},
         ),
       );
+      await tester.waitForFinder(subtitle);
       expect(subtitle, findsOneWidget);
     });
   });
@@ -72,15 +73,15 @@ void main() {
       // given:
       // when:
       await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
       final Finder tile = find.byType(ListTile);
+      await tester.waitForFinder(tile);
       await tester.tap(tile);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder page = find.byType(SummaryMetricsPage);
+      await tester.waitForFinder(page);
       expect(page, findsOneWidget);
     });
   });

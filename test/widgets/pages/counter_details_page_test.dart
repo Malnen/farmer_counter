@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:farmer_counter/models/counter_item.dart';
+import '../../tester_extension.dart';
 import 'package:farmer_counter/widgets/pages/counter_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -32,11 +33,10 @@ void main() {
       // when:
       await tester.pumpWidget(app);
       await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder page = find.byType(CounterDetailsPage);
+      await tester.waitForFinder(page);
       expect(page, findsOneWidget);
       final Finder cardNameLabel = find.text('${'counter_details_page.fields.name'.tr()}: ');
       expect(cardNameLabel, findsOneWidget);
@@ -58,11 +58,11 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder edit = find.byIcon(Icons.edit);
+      await tester.waitForFinder(edit);
       await tester.tap(edit.first);
-      await tester.pumpAndSettle();
       final Finder textField = find.byType(TextField);
+      await tester.waitForFinder(textField);
       await tester.enterText(textField, 'UpdatedName');
       final Finder save = find.text('counter_details_page.dialogs.edit_name.save'.tr());
       await tester.tap(save);
@@ -81,11 +81,11 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder edit = find.byIcon(Icons.edit);
+      await tester.waitForFinder(edit);
       await tester.tap(edit.first);
-      await tester.pumpAndSettle();
       final Finder textField = find.byType(TextField);
+      await tester.waitForFinder(textField);
       await tester.enterText(textField, 'IgnoredName');
       await tester.tap(find.text('counter_details_page.dialogs.edit_name.cancel'.tr()));
       await tester.pump();
@@ -95,24 +95,25 @@ void main() {
       // then:
       expect(updatedItem, isNull);
     });
-  });  testWidgets('should edit count', (WidgetTester tester) async {
+  });
+
+  testWidgets('should edit count', (WidgetTester tester) async {
     await tester.runAsync(() async {
       // given:
       // when:
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder editCount = find.byIcon(Icons.edit).last;
       await tester.tap(editCount);
-      await tester.pumpAndSettle();
       final Finder textField = find.byType(TextField);
+      await tester.waitForFinder(textField);
       await tester.enterText(textField, '42');
       final Finder save = find.text('counter_details_page.dialogs.edit_count.save'.tr());
       await tester.tap(save);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
+      await pumpEventQueue();
 
       // then:
       expect(updatedItem, isNotNull);
@@ -127,11 +128,11 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
+      await tester.waitForFinder(find.byIcon(Icons.edit));
       final Finder editCount = find.byIcon(Icons.edit).last;
       await tester.tap(editCount);
-      await tester.pumpAndSettle();
       final Finder textField = find.byType(TextField);
+      await tester.waitForFinder(textField);
       await tester.enterText(textField, '99');
       await tester.tap(find.text('counter_details_page.dialogs.edit_count.cancel'.tr()));
       await tester.pumpAndSettle();
@@ -140,5 +141,4 @@ void main() {
       expect(updatedItem, isNull);
     });
   });
-
 }

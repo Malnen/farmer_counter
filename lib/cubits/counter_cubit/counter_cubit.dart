@@ -30,16 +30,18 @@ class CounterCubit extends Cubit<CounterState> {
     await super.close();
   }
 
-  Future<void> addItem(String name) async {
+  Future<CounterItem?> addItem(String name) async {
     name = name.trim();
     if (name.isEmpty) {
-      return;
+      return null;
     }
 
     CounterItem item = CounterItem.create(name: name);
     await _isar.writeTxn(() async => _isar.counterItems.put(item));
     item = (await _isar.counterItems.getByGuid(item.guid))!;
     emit(state.copyWith(items: <CounterItem>[...state.items, item]));
+
+    return item;
   }
 
   Future<void> removeItem(String guid, {VoidCallback? afterDelete}) async {
@@ -167,6 +169,8 @@ class CounterCubit extends Cubit<CounterState> {
 
   Future<void> _loadItems() async {
     final List<CounterItem> items = await _isar.counterItems.where().findAll();
-    emit(state.copyWith(items: items, status: CounterStatus.loaded));
+    if (!isClosed) {
+      emit(state.copyWith(items: items, status: CounterStatus.loaded));
+    }
   }
 }

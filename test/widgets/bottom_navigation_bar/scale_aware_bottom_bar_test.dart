@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late SettingsCubit cubit;
@@ -35,12 +36,12 @@ void main() {
       // given:
       // when:
       await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
 
       // then:
       final Finder add = find.byIcon(Icons.add);
-      final Finder settings = find.byIcon(Icons.settings);
+      await tester.waitForFinder(add);
       expect(add, findsOneWidget);
+      final Finder settings = find.byIcon(Icons.settings);
       expect(settings, findsOneWidget);
       final Size size = tester.getSize(find.byType(Container).first);
       expect(size.height, kBottomNavigationBarHeight * cubit.state.tabBarScale);

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late Widget app;
@@ -29,10 +30,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder countersPage = find.byType(CountersPage);
+      await tester.waitForFinder(countersPage);
       expect(countersPage, findsOneWidget);
     });
   });
@@ -46,23 +47,19 @@ void main() {
       await pumpEventQueue();
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder fab = find.byType(FloatingActionButton);
+      await tester.waitForFinder(fab);
       await tester.tap(fab);
       await tester.pumpAndSettle();
       final Finder name = find.byType(TextField);
       await tester.enterText(name, 'test');
-      await tester.pumpAndSettle();
       final Finder add = find.text('counters_page.dialogs.add_counter_dialog.counter_add_label'.tr());
+      await tester.waitForFinder(add);
       await tester.tap(add);
-      await pumpEventQueue();
-      await pumpEventQueue();
-      await pumpEventQueue();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder cards = find.byType(CounterCard);
+      await tester.waitForFinder(cards);
       expect(cards, findsOneWidget);
     });
   });
@@ -74,22 +71,19 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder fab = find.byType(FloatingActionButton);
+      await tester.waitForFinder(fab);
       await tester.tap(fab);
-      await tester.pumpAndSettle();
       final Finder name = find.byType(TextField);
+      await tester.waitForFinder(name);
       await tester.enterText(name, 'test');
-      await tester.pumpAndSettle();
       final Finder cancel = find.text('counters_page.dialogs.add_counter_dialog.counter_cancel_label'.tr());
+      await tester.waitForFinder(cancel);
       await tester.tap(cancel);
-      await pumpEventQueue();
-      await pumpEventQueue();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder cards = find.byType(CounterCard);
+      await tester.waitForFinderToDisappear(cards);
       expect(cards, findsNothing);
     });
   });
@@ -101,43 +95,27 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder fab = find.byType(FloatingActionButton);
+      await tester.waitForFinder(fab);
       await tester.tap(fab);
-      await tester.pumpAndSettle();
       final Finder name = find.byType(TextField);
+      await tester.waitForFinder(name);
       await tester.enterText(name, 'withHistory');
-      await tester.pumpAndSettle();
       final Finder add = find.text('counters_page.dialogs.add_counter_dialog.counter_add_label'.tr());
+      await tester.waitForFinder(add);
       await tester.tap(add);
-      await tester.pumpAndSettle();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
-      final Finder plus = find.descendant(of: find.byType(CounterCard), matching:  find.byIcon(Icons.add));
+      final Finder plus = find.descendant(of: find.byType(CounterCard), matching: find.byIcon(Icons.add));
+      await tester.waitForFinder(plus);
+      await tester.waitForFinder(plus);
       await tester.tap(plus);
-      await tester.pumpAndSettle();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder more = find.byIcon(Icons.expand_more);
+      await tester.waitForFinder(more);
       await tester.ensureVisible(more);
       await tester.tap(more);
-      await tester.pumpAndSettle();
 
       // then:
       final Finder reverse = find.byIcon(Icons.undo);
+      await tester.waitForFinder(reverse);
       expect(reverse, findsOneWidget);
     });
   });
@@ -149,52 +127,33 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder fab = find.byType(FloatingActionButton);
+      await tester.waitForFinder(fab);
       await tester.tap(fab);
-      await tester.pumpAndSettle();
       final Finder name = find.byType(TextField);
+      await tester.waitForFinder(name);
       await tester.enterText(name, 'withHistory');
-      await tester.pumpAndSettle();
       final Finder add = find.text('counters_page.dialogs.add_counter_dialog.counter_add_label'.tr());
+      await tester.waitForFinder(add);
       await tester.tap(add);
-      await tester.pumpAndSettle();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
-      final Finder plus = find.descendant(of: find.byType(CounterCard), matching:  find.byIcon(Icons.add));
+      final Finder plus = find.descendant(of: find.byType(CounterCard), matching: find.byIcon(Icons.add));
+      await tester.waitForFinder(plus);
       await tester.tap(plus);
-      await tester.pumpAndSettle();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder more = find.byIcon(Icons.expand_more);
+      await tester.waitForFinder(more);
       await tester.ensureVisible(more);
       await tester.tap(more);
       await tester.pumpAndSettle();
-      await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder reverse = find.byIcon(Icons.undo);
+      await tester.waitForFinder(reverse);
       await tester.ensureVisible(reverse);
-      await tester.tap(reverse);
+      await tester.pumpAndSettle(Duration(seconds: 1));
+      await tester.tap(reverse, warnIfMissed: false);
       await tester.pump();
-      await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder dialog = find.byType(AlertDialog);
+      await tester.waitForFinder(dialog);
       expect(dialog, findsOneWidget);
       final Finder title = find.text('counter_details_page.history.delete_title'.tr());
       expect(title, findsOneWidget);

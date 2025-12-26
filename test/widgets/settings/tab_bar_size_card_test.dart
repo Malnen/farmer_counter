@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late SettingsCubit cubit;
@@ -30,10 +31,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder title = find.text('settings.tabBarSize.title'.tr());
+      await tester.waitForFinder(title);
       expect(title, findsOneWidget);
       final Finder slider = find.byType(Slider);
       expect(slider, findsOneWidget);
@@ -50,10 +51,10 @@ void main() {
     await tester.runAsync(() async {
       // given:
       await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
 
       // when:
       final Finder slider = find.byType(Slider);
+      await tester.waitForFinder(slider);
       await tester.drag(slider, const Offset(200, 0));
       await tester.pumpAndSettle();
 
@@ -66,15 +67,15 @@ void main() {
     await tester.runAsync(() async {
       // given:
       await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
 
       // when:
       final Finder slider = find.byType(Slider);
+      await tester.waitForFinder(slider);
       await tester.drag(slider, const Offset(200, 0));
-      await tester.pumpAndSettle();
 
       // then:
       final Finder label = find.textContaining('%');
+      await tester.waitForFinder(label);
       expect(label, findsWidgets);
     });
   });

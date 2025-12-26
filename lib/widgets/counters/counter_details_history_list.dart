@@ -31,7 +31,7 @@ class CounterDetailsHistoryList extends HookWidget {
         history.value = <CounterChangeItem>[];
         offset.value = 0;
         hasMore.value = true;
-        _loadMore(item, history, isLoading, hasMore, offset);
+        _loadMore(context, item, history, isLoading, hasMore, offset);
 
         return null;
       },
@@ -42,7 +42,7 @@ class CounterDetailsHistoryList extends HookWidget {
       () {
         void onScroll() {
           if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 100) {
-            _loadMore(item, history, isLoading, hasMore, offset);
+            _loadMore(context, item, history, isLoading, hasMore, offset);
           }
         }
 
@@ -117,6 +117,7 @@ class CounterDetailsHistoryList extends HookWidget {
   }
 
   Future<void> _loadMore(
+    BuildContext context,
     ValueNotifier<CounterItem> item,
     ValueNotifier<List<CounterChangeItem>> history,
     ValueNotifier<bool> isLoading,
@@ -139,7 +140,9 @@ class CounterDetailsHistoryList extends HookWidget {
         )
         .findAll();
 
-    if (items.length < pageSize) {
+    if (!context.mounted) {
+      return;
+    } else if (items.length < pageSize) {
       hasMore.value = false;
     }
 

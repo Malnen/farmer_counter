@@ -16,6 +16,7 @@ import 'package:isar_community/isar.dart';
 import 'package:provider/provider.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late Isar isar;
@@ -50,10 +51,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder card = find.byType(CounterSummaryCard);
+      await tester.waitForFinder(card);
       expect(card, findsOneWidget);
       final Finder text = find.text('SummaryTest');
       expect(text, findsOneWidget);
@@ -67,10 +68,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder count = find.text('0');
+      await tester.waitForFinderCount(count, 8);
       expect(count, findsNWidgets(8));
     });
   });
@@ -91,10 +92,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder card = find.byType(CounterSummaryCard);
+      await tester.waitForFinder(card);
       final CounterSummaryCardState state = tester.state(card) as CounterSummaryCardState;
       final CounterSummary summary = await state.getCounterSummary(
         counter: counter,
@@ -114,18 +115,18 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // when:
       final Finder sixMonths = find.text('counter_summary_card.six_months'.tr());
+      await tester.waitForFinder(sixMonths);
       await tester.ensureVisible(sixMonths);
       await tester.tap(sixMonths);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder card = find.byType(CounterSummaryCard);
+      await tester.waitForFinder(card);
       final CounterSummaryCardState state = tester.state(card) as CounterSummaryCardState;
       expect(state.selectedDateRange.preset, DateRangePreset.sixMonths);
     });
@@ -138,8 +139,8 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder card = find.byType(CounterSummaryCard);
+      await tester.waitForFinder(card);
       final CounterSummaryCardState state = tester.state(card) as CounterSummaryCardState;
 
       final CounterSummary summary = await state.getCounterSummary(
@@ -161,14 +162,16 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final Finder card = find.byType(CounterSummaryCard);
+      await tester.waitForFinder(card);
       final CounterSummaryCardState state = tester.state(card) as CounterSummaryCardState;
       final Iterable<SummaryMetric> metrics = SummaryMetric.values.where(state.settingsCubit.isSummaryMetricEnabled);
 
       // then:
       for (final SummaryMetric metric in metrics) {
-        expect(find.text(metric.label), findsWidgets);
+        final Finder text = find.text(metric.label);
+        await tester.waitForFinder(text);
+        expect(text, findsWidgets);
       }
     });
   });

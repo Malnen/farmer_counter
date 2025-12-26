@@ -94,7 +94,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // then:
-    final List<IconData?> icons = tester.widgetList<Icon>(find.byType(Icon)).map((Icon i) => i.icon).toList();
+    final List<IconData?> icons = tester.widgetList<Icon>(find.byType(Icon)).map((Icon icon) => icon.icon).toList();
     expect(
       icons,
       containsAllInOrder(

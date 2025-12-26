@@ -13,6 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late DriveSyncService syncService;
@@ -41,10 +42,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder summaryMetrics = find.byType(SummaryMetricsCard);
+      await tester.waitForFinder(summaryMetrics);
       expect(summaryMetrics, findsOneWidget);
       final Finder plusMinus = find.byType(PlusMinusOrderCard);
       expect(plusMinus, findsOneWidget);
@@ -62,10 +63,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder disconnected = find.byType(GoogleDriveDisConnectedCard);
+      await tester.waitForFinder(disconnected);
       expect(disconnected, findsOneWidget);
       final Finder connected = find.byType(GoogleDriveConnectedCard);
       expect(connected, findsNothing);
@@ -81,10 +82,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder connected = find.byType(GoogleDriveConnectedCard);
+      await tester.waitForFinder(connected);
       expect(connected, findsOneWidget);
       final Finder disconnected = find.byType(GoogleDriveDisConnectedCard);
       expect(disconnected, findsNothing);

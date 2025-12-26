@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late DriveSyncService syncService;
@@ -29,10 +30,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder byIcon = find.byIcon(Icons.cloud_done);
+      await tester.waitForFinder(byIcon);
       expect(byIcon, findsOneWidget);
       final Finder title = find.text('settings.drive.connected_title'.tr());
       expect(title, findsOneWidget);
@@ -50,9 +51,9 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       final Finder syncNow = find.text('settings.drive.sync_now'.tr());
+      await tester.waitForFinder(syncNow);
       await tester.tap(syncNow);
       await tester.pumpAndSettle();
 
@@ -70,14 +71,14 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       final Finder disconnect = find.text('settings.drive.disconnect'.tr());
+      await tester.waitForFinder(disconnect);
       await tester.tap(disconnect);
-      await tester.pumpAndSettle();
 
       // then:
       final Finder dialog = find.byType(AlertDialog);
+      await tester.waitForFinder(dialog);
       expect(dialog, findsOneWidget);
 
       // when:

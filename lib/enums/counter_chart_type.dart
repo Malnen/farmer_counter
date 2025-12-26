@@ -1,0 +1,4 @@
+enum CounterChartType {
+  bar,
+  line,
+}

@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../test_material_app.dart';
+import '../../tester_extension.dart';
 
 void main() {
   late SettingsCubit cubit;
@@ -30,10 +31,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       final Finder title = find.text('settings.summary_metrics.title'.tr());
+      await tester.waitForFinder(title);
       expect(title, findsOneWidget);
     });
   });
@@ -45,7 +46,6 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
 
       // then:
       for (final SummaryMetric metric in SummaryMetric.values) {
@@ -73,9 +73,9 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await pumpEventQueue();
-      await tester.pumpAndSettle();
       final SummaryMetric metric = SummaryMetric.added;
       final Finder tile = find.text(metric.label);
+      await tester.waitForFinder(tile);
       bool enabled = cubit.isSummaryMetricEnabled(metric);
       expect(enabled, true);
 

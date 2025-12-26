@@ -177,19 +177,21 @@ class CounterCardActions extends HookWidget {
             maxWidth: maxWidth,
             minHeight: 48,
             maxHeight: 48,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Icon(icon),
-                const SizedBox(width: 8),
-                Text(
-                  labelKey.tr(),
-                  maxLines: 1,
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                ),
-              ],
-            ),
+            child: hasOnPressed
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Icon(icon),
+                      const SizedBox(width: 8),
+                      Text(
+                        labelKey.tr(),
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
+                      ),
+                    ],
+                  )
+                : SizedBox.shrink(),
           ),
         ),
       ),

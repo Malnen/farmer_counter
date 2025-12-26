@@ -2,8 +2,14 @@ import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:farmer_counter/models/counter_change_item.dart';
+import 'package:farmer_counter/models/counter_chart_data.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:farmer_counter/models/date_range_selection.dart';
+import 'package:farmer_counter/widgets/scale_listener/scale_listener.dart';
+import 'package:farmer_counter/widgets/summary/graph/chart_zoom_slider.dart';
+import 'package:farmer_counter/widgets/summary/graph/counter_chart_type_selector.dart';
+import 'package:farmer_counter/widgets/summary/graph/counter_graph_builder.dart';
+import 'package:farmer_counter/widgets/summary/graph/counter_graph_factory.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,10 +29,19 @@ class CounterSummaryGraph extends StatefulHookWidget {
 }
 
 class CounterSummaryGraphState extends State<CounterSummaryGraph> {
+  static const double leftSideSize = 32;
+  static const double barWidth = 28;
+  static const int minVisibleBars = 10;
+  static const double chartTopPadding = 8;
+  static const double chartBottomPadding = 24;
+
   late Isar isar;
   late ValueNotifier<CounterItem> item;
   late ValueNotifier<bool> isLoading;
   late ValueNotifier<List<CounterChangeItem>> changeItems;
+  late ValueNotifier<double> minY;
+  late ValueNotifier<double> maxY;
+  late ValueNotifier<double> maxScale;
 
   @override
   void initState() {
@@ -36,111 +51,195 @@ class CounterSummaryGraphState extends State<CounterSummaryGraph> {
 
   @override
   Widget build(BuildContext context) {
-    item = context.read();
+    item = context.watch();
     isLoading = useState<bool>(true);
     changeItems = useState<List<CounterChangeItem>>(<CounterChangeItem>[]);
+    minY = useState<double>(0);
+    maxY = useState<double>(0);
+    maxScale = useState<double>(1);
+
+    final ValueNotifier<double> scale = useState<double>(1);
+    final ScrollController scrollController = useScrollController();
 
     useEffect(
       () {
-        loadData();
+        loadData(context);
+        scale.value = 1;
+        if (scrollController.hasClients) {
+          scrollController.jumpTo(0);
+        }
+
         return null;
       },
       <Object?>[widget.selection],
     );
 
     return SizedBox(
-      height: 240,
+      height: 260,
       child: Card(
         elevation: 3,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.all(12),
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: ValueListenableBuilder<bool>(
-            valueListenable: isLoading,
-            builder: (BuildContext context, bool loading, _) {
-              if (loading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (changeItems.value.isEmpty) {
-                return Center(child: Text('counter_summary_graph.no_data'.tr()));
-              }
-
-              final List<BarChartGroupData> barGroups = <BarChartGroupData>[];
-              for (int i = 0; i < changeItems.value.length; i++) {
-                final CounterChangeItem change = changeItems.value[i];
-                barGroups.add(
-                  BarChartGroupData(
-                    x: i,
-                    barRods: <BarChartRodData>[
-                      BarChartRodData(
-                        toY: change.delta.toDouble(),
-                        color: change.delta >= 0 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.error,
-                      ),
-                    ],
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  CounterChartTypeSelector(item: item.value),
+                  ChartZoomSlider(
+                    scale: scale,
+                    minScale: 1,
+                    maxScale: maxScale.value,
                   ),
-                );
-              }
+                ],
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: ValueListenableBuilder<bool>(
+                  valueListenable: isLoading,
+                  builder: (BuildContext context, bool loading, _) {
+                    if (loading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (changeItems.value.isEmpty) {
+                      return Center(
+                        child: Text('counter_summary_graph.no_data'.tr()),
+                      );
+                    }
 
-              return BarChart(
-                BarChartData(
-                  titlesData: FlTitlesData(
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        interval: max(1, (changeItems.value.length / 6).floor()).toDouble(),
-                        getTitlesWidget: (double value, TitleMeta meta) {
-                          final int index = value.toInt();
-                          if (index < 0 || index >= changeItems.value.length) {
-                            return const SizedBox.shrink();
-                          }
-                          final DateTime date = changeItems.value[index].at;
-                          return Text(
-                            DateFormat.Md().format(date),
-                            style: const TextStyle(fontSize: 10),
-                          );
-                        },
-                      ),
-                    ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 32,
-                        getTitlesWidget: (double value, TitleMeta meta) {
-                          return Text(
-                            value.toInt().toString(),
-                            style: const TextStyle(fontSize: 10),
-                          );
-                        },
-                      ),
-                    ),
-                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  ),
-                  borderData: FlBorderData(show: false),
-                  barGroups: barGroups,
-                  gridData: FlGridData(show: true),
+                    final CounterChartData chartData = CounterChartData(
+                      items: changeItems.value,
+                      minY: minY.value,
+                      maxY: maxY.value,
+                    );
+                    final CounterItemChartBuilder builder = CounterItemChartFactory.create(item.value.lastSelectedChartType);
+
+                    return LayoutBuilder(
+                      builder: (BuildContext context, BoxConstraints constraints) {
+                        final double viewportWidth = constraints.maxWidth - leftSideSize;
+                        final double baseWidth = max(
+                          viewportWidth,
+                          changeItems.value.length * barWidth,
+                        );
+                        WidgetsBinding.instance.addPostFrameCallback(
+                          (Duration timeStamp) => maxScale.value = max(1, baseWidth / (minVisibleBars * barWidth)),
+                        );
+                        final double chartWidth = max(viewportWidth, viewportWidth * scale.value);
+                        final double chartHeight = constraints.maxHeight - chartTopPadding;
+
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            top: chartTopPadding,
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              SizedBox(
+                                width: leftSideSize,
+                                height: chartHeight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    bottom: chartBottomPadding,
+                                  ),
+                                  child: BarChart(
+                                    BarChartData(
+                                      minY: minY.value,
+                                      maxY: maxY.value,
+                                      barTouchData: BarTouchData(enabled: false),
+                                      titlesData: FlTitlesData(
+                                        leftTitles: AxisTitles(
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            reservedSize: leftSideSize,
+                                            getTitlesWidget: (double value, _) => Padding(
+                                              padding: const EdgeInsets.only(right: 8),
+                                              child: Text(
+                                                textAlign: TextAlign.end,
+                                                value.toInt().toString(),
+                                                style: const TextStyle(
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        bottomTitles: AxisTitles(
+                                          sideTitles: SideTitles(showTitles: false),
+                                        ),
+                                        rightTitles: AxisTitles(
+                                          sideTitles: SideTitles(showTitles: false),
+                                        ),
+                                        topTitles: AxisTitles(
+                                          sideTitles: SideTitles(showTitles: false),
+                                        ),
+                                      ),
+                                      borderData: FlBorderData(show: false),
+                                      gridData: FlGridData(show: true),
+                                      barGroups: const <BarChartGroupData>[],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: ScaleListener(
+                                  behavior: HitTestBehavior.translucent,
+                                  onScaleUpdate: (double delta) {
+                                    if (delta > 0 && delta.isFinite && delta != 1) {
+                                      scale.value = (scale.value * delta).clamp(1, maxScale.value).toDouble();
+                                    }
+                                  },
+                                  child: SingleChildScrollView(
+                                    controller: scrollController,
+                                    scrollDirection: Axis.horizontal,
+                                    child: builder.build(
+                                      context: context,
+                                      data: chartData,
+                                      width: chartWidth,
+                                      height: chartHeight,
+                                      showLeftTitles: false,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Future<void> loadData() async {
+  Future<void> loadData(BuildContext context) async {
     isLoading.value = true;
     final DateTimeRange range = widget.selection.toRange();
-    final List<CounterChangeItem> results = await isar.counterChangeItems
-        .filter()
-        .counterGuidEqualTo(item.value.guid)
-        .and()
-        .atBetween(range.start, range.end)
-        .findAll();
+    final List<CounterChangeItem> results =
+        await isar.counterChangeItems.filter().counterGuidEqualTo(item.value.guid).and().atBetween(range.start, range.end).findAll();
+    double localMin = 0;
+    double localMax = 0;
+    for (final CounterChangeItem item in results) {
+      final double y = item.delta.toDouble();
+      if (y < localMin) {
+        localMin = y;
+      }
 
-    results.sort((CounterChangeItem a, CounterChangeItem b) => a.at.compareTo(b.at));
+      if (y > localMax) {
+        localMax = y;
+      }
+    }
 
-    changeItems.value = results;
-    isLoading.value = false;
+    if (context.mounted) {
+      results.sort((CounterChangeItem a, CounterChangeItem b) => a.at.compareTo(b.at));
+      changeItems.value = results;
+      isLoading.value = false;
+      minY.value = localMin;
+      maxY.value = localMax;
+    }
   }
 }

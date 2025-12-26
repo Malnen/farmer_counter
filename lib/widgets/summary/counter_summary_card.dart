@@ -53,7 +53,7 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
     useEffect(
       () {
         final DateTimeRange<DateTime> range = selectedDateRange.toRange();
-        loadCounterSummary(range.start, range.end);
+        loadCounterSummary(context, range.start, range.end);
         return null;
       },
       const <Object?>[],
@@ -191,7 +191,7 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
           await pickCustomDateRange();
         } else {
           final DateTimeRange<DateTime> range = selectedDateRange.toRange();
-          await loadCounterSummary(range.start, range.end);
+          await loadCounterSummary(context, range.start, range.end);
         }
         widget.onPresetChange?.call(selectedDateRange);
       },
@@ -199,17 +199,19 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
     );
   }
 
-  Future<void> loadCounterSummary(DateTime start, DateTime end) async {
+  Future<void> loadCounterSummary(BuildContext context, DateTime start, DateTime end) async {
     isLoading.value = true;
     final CounterSummary summaryValue = await getCounterSummary(
       counter: counterItem.value,
       start: start,
       end: end,
     );
-    startDate.value = start;
-    endDate.value = end;
-    counterSummary.value = summaryValue;
-    isLoading.value = false;
+    if (context.mounted) {
+      startDate.value = start;
+      endDate.value = end;
+      counterSummary.value = summaryValue;
+      isLoading.value = false;
+    }
   }
 
   Future<void> pickCustomDateRange() async {
@@ -227,7 +229,7 @@ class CounterSummaryCardState extends State<CounterSummaryCard> {
         customStart: picked.start,
         customEnd: picked.end,
       );
-      await loadCounterSummary(picked.start, picked.end);
+      await loadCounterSummary(context, picked.start, picked.end);
     }
   }
 
