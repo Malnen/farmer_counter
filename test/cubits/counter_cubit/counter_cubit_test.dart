@@ -155,6 +155,7 @@ void main() {
       expect(all, isEmpty);
     },
   );
+
   blocTest<CounterCubit, CounterState>(
     'updateItem updates name',
     build: CounterCubit.new,
@@ -185,7 +186,6 @@ void main() {
       final CounterItem updated = existing.copyWith(count: 10);
       await cubit.updateItem(updated);
       await pumpEventQueue();
-      await pumpEventQueue();
     },
     verify: (CounterCubit cubit) async {
       expect(cubit.state.items.length, 1);
@@ -203,16 +203,16 @@ void main() {
   blocTest<CounterCubit, CounterState>(
     'applyDelta updates count and appends history',
     build: CounterCubit.new,
-    act: (CounterCubit counterCubit) async {
-      await counterCubit.addItem('Horses');
-      final String counterGuid = counterCubit.state.items.first.guid;
-      await counterCubit.applyDelta(guid: counterGuid, delta: 5);
+    act: (CounterCubit cubit) async {
+      await cubit.addItem('Horses');
+      await pumpEventQueue();
+      final String counterGuid = cubit.state.items.first.guid;
+      await cubit.applyDelta(guid: counterGuid, delta: 5);
       await pumpEventQueue();
     },
-    verify: (CounterCubit counterCubit) async {
-      final String counterGuid = counterCubit.state.items.first.guid;
-      final CounterItem updatedCounterItem =
-          counterCubit.state.items.firstWhere((CounterItem counterItem) => counterItem.guid == counterGuid);
+    verify: (CounterCubit cubit) async {
+      final String counterGuid = cubit.state.items.first.guid;
+      final CounterItem updatedCounterItem = cubit.state.items.firstWhere((CounterItem counterItem) => counterItem.guid == counterGuid);
       expect(updatedCounterItem.count, 5);
       final List<CounterChangeItem> counterChangeHistory = await isar.counterChangeItems.filter().counterGuidEqualTo(counterGuid).findAll();
       expect(counterChangeHistory.length, 1);
@@ -226,15 +226,15 @@ void main() {
   blocTest<CounterCubit, CounterState>(
     'applyDelta with delta 0 does not append history',
     build: CounterCubit.new,
-    act: (CounterCubit counterCubit) async {
-      await counterCubit.addItem('ZeroDelta');
-      final String counterGuid = counterCubit.state.items.first.guid;
-      await counterCubit.applyDelta(guid: counterGuid, delta: 0);
+    act: (CounterCubit cubit) async {
+      await cubit.addItem('ZeroDelta');
+      final String counterGuid = cubit.state.items.first.guid;
+      await cubit.applyDelta(guid: counterGuid, delta: 0);
       await pumpEventQueue();
     },
-    verify: (CounterCubit counterCubit) async {
-      final String counterGuid = counterCubit.state.items.first.guid;
-      final CounterItem counterItem = counterCubit.state.items.firstWhere((CounterItem item) => item.guid == counterGuid);
+    verify: (CounterCubit cubit) async {
+      final String counterGuid = cubit.state.items.first.guid;
+      final CounterItem counterItem = cubit.state.items.firstWhere((CounterItem item) => item.guid == counterGuid);
       expect(counterItem.count, 0);
       final List<CounterChangeItem> counterChangeHistory = await isar.counterChangeItems.filter().counterGuidEqualTo(counterGuid).findAll();
       expect(counterChangeHistory.length, 0);
@@ -312,6 +312,7 @@ void main() {
     build: CounterCubit.new,
     act: (CounterCubit cubit) async {
       await cubit.addItem('NoHistory');
+      await pumpEventQueue();
     },
     verify: (CounterCubit cubit) async {
       final String guid = cubit.state.items.first.guid;
