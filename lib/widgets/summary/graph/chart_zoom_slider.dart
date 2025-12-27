@@ -1,26 +1,32 @@
-import 'package:flutter/material.dart';
+  import 'package:farmer_counter/widgets/hold_repeat_icon/hold_repeat_icon.dart';
+  import 'package:flutter/material.dart';
 
-class ChartZoomSlider extends StatelessWidget {
-  final ValueNotifier<double> scale;
-  final double minScale;
-  final double maxScale;
+  class ChartZoomSlider extends StatelessWidget {
+    final ValueNotifier<double> scale;
+    final double minScale;
+    final double maxScale;
 
-  const ChartZoomSlider({
-    required this.scale,
-    required this.minScale,
-    required this.maxScale,
-  });
+    const ChartZoomSlider({
+      required this.scale,
+      required this.minScale,
+      required this.maxScale,
+    });
 
-  @override
-  Widget build(BuildContext context) => Row(
-        children: <Widget>[
-          const Icon(
-            Icons.zoom_out,
-            size: 18,
-          ),
-          SizedBox(
-            width: 120,
-            child: ValueListenableBuilder<double>(
+    double get _step => (maxScale - minScale) / 10;
+
+    @override
+    Widget build(BuildContext context) {
+      return ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 250),
+        child: Row(
+          children: <Widget>[
+            HoldRepeatIcon(
+              hitboxSize: 28,
+              iconSize: 28,
+              icon: Icons.zoom_out,
+              onStep: _zoomOut,
+            ),
+            ValueListenableBuilder<double>(
               valueListenable: scale,
               builder: (BuildContext context, double value, _) => Slider(
                 min: minScale,
@@ -29,11 +35,18 @@ class ChartZoomSlider extends StatelessWidget {
                 onChanged: (double newValue) => scale.value = newValue,
               ),
             ),
-          ),
-          const Icon(
-            Icons.zoom_in,
-            size: 18,
-          ),
-        ],
+            HoldRepeatIcon(
+              hitboxSize: 28,
+              iconSize: 28,
+              icon: Icons.zoom_in,
+              onStep: _zoomIn,
+            ),
+          ],
+        ),
       );
-}
+    }
+
+    void _zoomOut() => scale.value = (scale.value - _step).clamp(minScale, maxScale);
+
+    void _zoomIn() => scale.value = (scale.value + _step).clamp(minScale, maxScale);
+  }

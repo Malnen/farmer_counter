@@ -14,7 +14,7 @@ class WorkerTableRenderer {
     }
 
     _printHeader();
-    for (final row in rows) {
+    for (final WorkerRow row in rows) {
       _printRow(row);
     }
   }
@@ -33,12 +33,12 @@ class WorkerTableRenderer {
     _clearLine();
     stdout.writeln(
       '${row.workerId.toString().padRight(6)} | '
-          '${row.currentRun.toString().padRight(3)} | '
-          '${row.passed.toString().padRight(6)} | '
-          '${row.failed.toString().padRight(6)} | '
-          '${row.total.toString().padRight(5)} | '
-          '${row.elapsedFormatted.padRight(8)} | '
-          '${row.avgPerRunFormatted.padRight(7)}',
+      '${row.currentRun.toString().padRight(3)} | '
+      '${row.passed.toString().padRight(6)} | '
+      '${row.failed.toString().padRight(6)} | '
+      '${row.total.toString().padRight(5)} | '
+      '${row.elapsedFormatted.padRight(8)} | '
+      '${row.avgPerRunFormatted.padRight(7)}',
     );
   }
 
@@ -76,6 +76,7 @@ class WorkerRow {
   }
 
   String get elapsedFormatted => _fmt(elapsed);
+
   String get avgPerRunFormatted => _fmt(avgPerRun);
 
   String _fmt(Duration d) {

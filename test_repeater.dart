@@ -104,7 +104,7 @@ Future<void> main(List<String> args) async {
         final String stderrText = stderrBuffer.toString();
 
         if (_isCompilerRace(stderrText)) {
-          await Future.delayed(
+          await Future<void>.delayed(
             Duration(milliseconds: 500 + workerId * 200),
           );
           queue.add(runId);

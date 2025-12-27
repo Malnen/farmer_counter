@@ -5,6 +5,7 @@ import 'package:farmer_counter/models/counter_change_item.dart';
 import 'package:farmer_counter/models/counter_chart_data.dart';
 import 'package:farmer_counter/models/counter_item.dart';
 import 'package:farmer_counter/models/date_range_selection.dart';
+import 'package:farmer_counter/utils/bounded_value_notifier.dart';
 import 'package:farmer_counter/widgets/scale_listener/scale_listener.dart';
 import 'package:farmer_counter/widgets/summary/graph/chart_zoom_slider.dart';
 import 'package:farmer_counter/widgets/summary/graph/counter_chart_type_selector.dart';
@@ -58,7 +59,11 @@ class CounterSummaryGraphState extends State<CounterSummaryGraph> {
     maxY = useState<double>(0);
     maxScale = useState<double>(1);
 
-    final ValueNotifier<double> scale = useState<double>(1);
+    final ValueNotifier<double> scale = useMemoized(
+      () => BoundedValueNotifier(1, min: 1, max: maxScale.value),
+      <Object?>[maxScale.value],
+    );
+    useValueListenable(scale);
     final ScrollController scrollController = useScrollController();
 
     useEffect(

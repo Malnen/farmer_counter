@@ -105,4 +105,72 @@ void main() {
       expect(sliderWidget.value, 4.0);
     });
   });
+
+  testWidgets('should increase scale when tapping zoom in', (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      // given:
+      scale.value = 1.0;
+      await tester.pumpWidget(app);
+
+      // when:
+      final Finder zoomIn = find.byIcon(Icons.zoom_in);
+      await tester.waitForFinder(zoomIn);
+      await tester.tap(zoomIn);
+      await tester.pump();
+
+      // then:
+      expect(scale.value, greaterThan(1.0));
+    });
+  });
+
+  testWidgets('should decrease scale when tapping zoom out', (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      // given:
+      scale.value = 3.0;
+      await tester.pumpWidget(app);
+
+      // when:
+      final Finder zoomOut = find.byIcon(Icons.zoom_out);
+      await tester.waitForFinder(zoomOut);
+      await tester.tap(zoomOut);
+      await tester.pump();
+
+      // then:
+      expect(scale.value, lessThan(3.0));
+    });
+  });
+
+  testWidgets('should not decrease scale below minScale when tapping zoom out', (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      // given:
+      scale.value = 1.0;
+      await tester.pumpWidget(app);
+
+      // when:
+      final Finder zoomOut = find.byIcon(Icons.zoom_out);
+      await tester.waitForFinder(zoomOut);
+      await tester.tap(zoomOut);
+      await tester.pump();
+
+      // then:
+      expect(scale.value, 1.0);
+    });
+  });
+
+  testWidgets('should not increase scale above maxScale when tapping zoom in', (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      // given:
+      scale.value = 4.0;
+      await tester.pumpWidget(app);
+
+      // when:
+      final Finder zoomIn = find.byIcon(Icons.zoom_in);
+      await tester.waitForFinder(zoomIn);
+      await tester.tap(zoomIn);
+      await tester.pump();
+
+      // then:
+      expect(scale.value, 4.0);
+    });
+  });
 }
